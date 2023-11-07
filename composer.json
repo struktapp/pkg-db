@@ -1,0 +1,31 @@
+{
+    "name": "strukt/pkg-db",
+    "description": "Database",
+    "type": "strukt-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "pitsolu",
+            "email": "pitsolu@gmail.com"
+        }
+    ],
+    "minimum-stability":"dev",
+    "require": {
+        "strukt/framework": "v1.1.7-alpha",
+        "popphp/pop-db": "^5.4",
+        "gabordemooij/redbean": "dev-master",
+        "symfony/string": "6.4.x-dev"
+    },
+    "require-dev": {
+        "strukt/framework": "dev-master"
+    },
+    "autoload": {
+        
+        "psr-0": {
+
+            "Strukt\\": "src/",
+            "App\\":"lib/"
+        },
+        "files": ["src/helpers.php"]
+    }
+}
