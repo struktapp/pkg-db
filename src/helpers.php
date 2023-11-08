@@ -106,9 +106,8 @@ if(!function_exists("useDb")){
 		}
 
 		if(str($db)->equals("rb"))
-			$db = "pop";	
-
-		if(str($db)->equals("pop"))
+			$db = "pop";
+		elseif(str($db)->equals("pop"))
 			$db = "rb";
 
 		if(useDb($db))
