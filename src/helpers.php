@@ -95,6 +95,27 @@ if(!function_exists("useDb")){
 
 		return true;
 	}
+
+	function switch(){
+
+		$db = "rb";
+		if(reg()->exists("db.which")){
+
+			$db = reg("db.which");
+			reg()->remove("db.which");
+		}
+
+		if(str($db)->equals("rb"))
+			$db = "pop";	
+
+		if(str($db)->equals("pop"))
+			$db = "rb";
+
+		if(useDb($db))
+			return $db;
+
+		return null;
+	}
 }
 
 if(!function_exists("db")){
