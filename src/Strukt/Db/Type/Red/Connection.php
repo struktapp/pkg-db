@@ -16,7 +16,8 @@ class Connection{
 		$username = config("db.username");
 		$password = config("db.password");
 
-		R::setup($dsn, $username, $password);
+		if(!R::testConnection())
+			R::setup($dsn, $username, $password);
 	}
 
 	public function getPdo(){
