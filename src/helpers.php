@@ -96,7 +96,7 @@ if(!function_exists("useDb")){
 		return true;
 	}
 
-	function switch(){
+	function switchDb(){
 
 		$db = "rb";
 		if(reg()->exists("db.which")){
