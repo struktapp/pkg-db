@@ -98,14 +98,15 @@ if(!function_exists("useDb")){
 
 	function switchDb(){
 
-		$db = "rb";
 		if(reg()->exists("db.which")){
 
 			$db = reg("db.which");
 			reg()->remove("db.which");
 		}
 
-		if(str($db)->equals("rb"))
+		if(!isset($db))
+			$db = "rb";
+		elseif(str($db)->equals("rb"))
 			$db = "pop";
 		elseif(str($db)->equals("pop"))
 			$db = "rb";
