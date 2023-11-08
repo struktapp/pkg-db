@@ -2,7 +2,7 @@
 
 namespace Strukt\Package;
 
-class PkgDb implements Strukt\Framework\Contract\Package{
+class PkgDb implements \Strukt\Framework\Contract\Package{
 
 	private $manifest;
 
