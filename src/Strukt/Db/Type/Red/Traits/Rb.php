@@ -16,6 +16,8 @@ trait Rb{
             $props = array_keys($props);
             foreach($props as $idx=>$prop)
                 $this->bean->$prop = $args[$idx]??$args[$prop]; 
+
+            sync($this->bean);
         }
     }
 
