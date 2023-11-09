@@ -15,7 +15,7 @@ trait Rb{
             unset($props["bean"]);
             $props = array_keys($props);
             foreach($props as $idx=>$prop)
-                $this->bean->$props = $args[$idx]??$args[$prop]; 
+                $this->bean->$prop = $args[$idx]??$args[$prop]; 
         }
     }
 
