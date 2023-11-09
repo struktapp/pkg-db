@@ -7,10 +7,10 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 
 trait Rb{
 
-    public function __construct(array $data = []){
+    // public function __construct(array $data = []){
 
-        parent::__construct($data);
-    }
+        // parent::__construct($data);
+    // }
 
 	public function save(){
 
