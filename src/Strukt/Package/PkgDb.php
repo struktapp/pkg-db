@@ -15,7 +15,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 				"lib/App/Command/Db/DbMakeModels.php",
 		        "lib/App/Command/Db/ModelMake.php",
 		        "lib/App/Command/Db/DbMakeFromModels.php",
-		        "lib/App/Provider/Facade.php",
+		        "lib/App/Provider/Facet.php",
 		        "cfg/db.ini"
 			)
 		);
@@ -26,7 +26,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 		$settings = array(
 			"App:Cli"=>array(
 				"providers"=>array(
-					\App\Provider\Facade::class
+					\App\Provider\Facet::class
 				),
 				"middlewares"=>array(),
 				"commands"=>array(
@@ -37,7 +37,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 			),
 			"App:Idx"=>array(
 				"providers"=>array(
-					\App\Provider\Facade::class
+					\App\Provider\Facet::class
 				),
 				"middlewares"=>array()
 			)
