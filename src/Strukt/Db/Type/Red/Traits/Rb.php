@@ -7,6 +7,11 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 
 trait Rb{
 
+    public function __construct(array $data = []){
+
+        parent::__construct($data);
+    }
+
 	public function save(){
 
 		foreach(get_object_vars($this) as $property=>$value)
