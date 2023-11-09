@@ -15,7 +15,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 				"lib/App/Command/Db/DbMakeModels.php",
 		        "lib/App/Command/Db/ModelMake.php",
 		        "lib/App/Command/Db/DbMakeFromModels.php",
-		        "lib/App/Provider/Facade.php"
+		        "lib/App/Provider/Facade.php",
 		        "cfg/db.ini"
 			)
 		);
