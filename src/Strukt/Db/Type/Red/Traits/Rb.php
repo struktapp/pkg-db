@@ -7,10 +7,12 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 
 trait Rb{
 
-    // public function __construct(array $data = []){
+    public function __construct(...$args){
 
-        // parent::__construct($data);
-    // }
+        $props = array_keys(get_class_vars(__CLASS__));
+        foreach($props as $idx=>$prop)
+            $this->bean->$props = $args[$idx]??$args[$prop]; 
+    }
 
 	public function save(){
 
