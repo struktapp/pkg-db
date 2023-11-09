@@ -9,9 +9,12 @@ trait Rb{
 
     public function __construct(...$args){
 
-        $props = array_keys(get_class_vars(__CLASS__));
-        foreach($props as $idx=>$prop)
-            $this->bean->$props = $args[$idx]??$args[$prop]; 
+        if(!empty($args)){
+
+            $props = array_keys(get_class_vars(__CLASS__));
+            foreach($props as $idx=>$prop)
+                $this->bean->$props = $args[$idx]??$args[$prop]; 
+        }
     }
 
 	public function save(){
