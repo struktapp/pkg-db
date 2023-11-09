@@ -11,38 +11,42 @@ trait Rb{
 
         if(!empty($args)){
 
-            $props = get_class_vars(__CLASS__);
-            unset($props["bean"]);
-            $props = array_keys($props);
+            $props = array_keys($this->getProperties());
             foreach($props as $idx=>$prop)
-                $this->bean->$prop = $args[$idx]??$args[$prop]; 
-
-            sync($this->bean);
+                $this->$prop = $args[$idx]??$args[$prop]??null; 
         }
     }
 
-	public function save(){
+    private function getProperties(){
 
-		foreach(get_object_vars($this) as $property=>$value)
-        	if($property != 'bean')
-            	$this->bean->$property = $value;
+        $props = get_object_vars($this);
+        unset($props["bean"]);
 
-		R::store($this->bean);
-	}
+        return $props;
+    }
 
-	public function toArray(){
+    public function save(){
 
-		return $this->unbox()->export();
-	}
+        foreach(get_object_vars($this) as $property=>$value)
+            if($property != 'bean')
+                $this->bean->$property = $value;
 
-	public function __get($name) {
+        R::store($this->bean);
+    }
 
-    	$prop = str($name);
-    	if($prop->equals("id"))
-    		return $this->bean->id;
+    public function toArray(){
 
-    	$prop = $prop->concat("_id")->yield();
-    	if(property_exists($this, $prop))
+        return $this->unbox()?->export()??$this->getProperties();
+    }
+
+    public function __get($name) {
+
+        $prop = str($name);
+        if($prop->equals("id"))
+            return $this->bean->id;
+
+        $prop = $prop->concat("_id")->yield();
+        if(property_exists($this, $prop))
             return sync($this->bean);
 
         $inflector = new EnglishInflector();
