@@ -11,7 +11,9 @@ trait Rb{
 
         if(!empty($args)){
 
-            $props = array_keys(get_class_vars(__CLASS__));
+            $props = get_class_vars(__CLASS__);
+            unset($props["bean"]);
+            $props = array_keys($props);
             foreach($props as $idx=>$prop)
                 $this->bean->$props = $args[$idx]??$args[$prop]; 
         }
