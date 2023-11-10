@@ -17,10 +17,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 		        "lib/App/Command/Db/DbMakeFromModels.php",
 		        "lib/App/Command/Db/DbSeed.php",
 		        "lib/App/Provider/Facet.php",
-		        "db/data/permission.json",
-		        "db/data/role_permission.json",
-		        "db/data/role.json",
-		        "db/data/user.json",
+		        "db/data/.keep",
 		        "cfg/db.ini"
 			)
 		);
