@@ -142,10 +142,21 @@ if(!function_exists("db")){
 							->yield()))
 								->yield();
 
-		if(reg("db.which") == "pop")
-			return popdb($model_name, $id);
+		if(!is_null($model_name) && !is_null($id)){
 
-		return rb($model_name, $id);
+			if(reg("db.which") == "pop")
+				return popdb($model_name, $id);
+
+			return rb($model_name, $id);
+		}
+
+		if(is_null($model_name) && is_null($id)){
+
+			if(reg("db.which") == "pop")
+				return popdb();
+
+			return rb();
+		}
 	}
 }
 
