@@ -135,7 +135,7 @@ if(!function_exists("db")){
 
 		if(str($model_name)->endsWith("*"))
 			return str(config("app.name"))
-					->append(ucfirst(str(trim($model_name, "*"))
+					->concat(ucfirst(str(trim($model_name, "*"))
 						->toSnake()
 						->yield()))
 							->yield();
