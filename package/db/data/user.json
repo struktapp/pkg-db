@@ -1,0 +1,20 @@
+{
+	"table":"user",
+	"relations":{
+
+		"role":"name"
+	},
+	"data":[{
+			"username":"sadmin",
+			"password":"p@55w0rd",
+			"role_id":"admin",
+			"status":"Active"
+		},
+		{
+			"username":"noob",
+			"password":"noob@user",
+			"role_id":"user",
+			"status":"Active"
+		}
+	]
+}

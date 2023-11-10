@@ -1,0 +1,13 @@
+{
+	"table":"role",
+	"data":[
+		{
+			"name":"admin",
+			"descr":"Super Administrator"
+		},
+		{
+			"name":"user",
+			"descr":"Normal User"
+		}
+	]
+}

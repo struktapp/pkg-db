@@ -1,0 +1,46 @@
+{
+	"table":"role_permission",
+	"relations":{
+
+		"role":"name",
+		"permission":"name"
+	},
+	"data":[
+		{
+			"role_id":"admin",
+			"permission_id":"role_perm_add"
+		},
+		{
+			"role_id":"admin",
+			"permission_id":"role_perm_remove"
+		},
+		{
+			"role_id":"admin",
+			"permission_id":"role_update"
+		},
+		{
+			"role_id":"admin",
+			"permission_id":"role_add"
+		},
+		{
+			"role_id":"admin",
+			"permission_id":"role_perm_view"
+		},
+		{
+			"role_id":"admin",
+			"permission_id":"user_change_status"
+		},
+		{
+			"role_id":"admin",
+			"permission_id":"reset_password"
+		},
+		{
+			"role_id":"admin",
+			"permission_id":"user_add"
+		},
+		{
+			"role_id":"admin",
+			"permission_id":"user_update"
+		}
+	]
+}
