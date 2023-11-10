@@ -133,13 +133,14 @@ if(!function_exists("db")){
 
 	function db(string $model_name = null, int $id = null){
 
-		if(str($model_name)->endsWith("*"))
-			return str(config("app.name"))
-					->concat("\\")
-					->concat(ucfirst(str(trim($model_name, "*"))
-						->toSnake()
-						->yield()))
-							->yield();
+		if(!is_null($model_name) && is_null($id))
+			if(str($model_name)->endsWith("*"))
+				return str(config("app.name"))
+						->concat("\\")
+						->concat(ucfirst(str(trim($model_name, "*"))
+							->toSnake()
+							->yield()))
+								->yield();
 
 		if(reg("db.which") == "pop")
 			return popdb($model_name, $id);
