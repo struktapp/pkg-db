@@ -26,11 +26,15 @@ if(!function_exists("rb")){
 
 	function rb(string $model_name = null, int $id = null){
 
+		$model = str($model_name)->toLower()->yield();
 		if(!is_null($model_name) && is_null($id)) 
-			return R::dispense(str($model_name)->toLower()->yield())->box();
+			return R::dispense($model)->box();
 
         if(!is_null($id) && !is_null($model_name)) 
         	return sync(R::load($model_name, $id));
+
+        if(str($model_name)->endsWith("*"))
+			return $model;
 
 		return new R;
 	}
