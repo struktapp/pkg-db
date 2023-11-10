@@ -57,6 +57,16 @@ if(!function_exists("schema")){
 
 if(!function_exists("popdb")){
 
+	function makeModel(string $model){
+
+		$class = ucfirst(str($model)->toCamel()->yield());
+
+		if(!class_exists($class))
+			eval("class $class extends \Pop\Db\Record{}");
+
+		return new $class;
+	}
+
 	function popdb(string $model_name = null, int $id = null){
 
 		if(!is_null($model_name)){

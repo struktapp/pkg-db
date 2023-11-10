@@ -15,6 +15,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 				"lib/App/Command/Db/DbMakeModels.php",
 		        "lib/App/Command/Db/ModelMake.php",
 		        "lib/App/Command/Db/DbMakeFromModels.php",
+		        "lib/App/Command/Db/DbSeed.php",
 		        "lib/App/Provider/Facet.php",
 		        "cfg/db.ini"
 			)
@@ -32,7 +33,8 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 				"commands"=>array(
 					\App\Command\Db\DbMakeModels::class,
 			        \App\Command\Db\ModelMake::class,
-			        \App\Command\Db\DbMakeFromModels::class
+			        \App\Command\Db\DbMakeFromModels::class,
+			        \App\Command\Db\DbSeed::class
 				)
 			),
 			"App:Idx"=>array(
