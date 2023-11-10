@@ -33,9 +33,6 @@ if(!function_exists("rb")){
         if(!is_null($id) && !is_null($model_name)) 
         	return sync(R::load($model_name, $id));
 
-        if(str($model_name)->endsWith("*"))
-			return $model;
-
 		return new R;
 	}
 }
@@ -81,9 +78,6 @@ if(!function_exists("popdb")){
 									->toCamel()
 										->yield()))
 							->yield();
-
-			if(str($model_name)->endsWith("*"))
-				return $model;
 
 			if(!is_null($id))
 				return $model::findById($id);
@@ -138,6 +132,13 @@ if(!function_exists("useDb")){
 if(!function_exists("db")){
 
 	function db(string $model_name = null, int $id = null){
+
+		if(str($model_name)->endsWith("*"))
+			return str(config("app.name"))
+					->append(ucfirst(str(trim($model_name, "*"))
+						->toSnake()
+						->yield()))
+							->yield();
 
 		if(reg("db.which") == "pop")
 			return popdb($model_name, $id);
