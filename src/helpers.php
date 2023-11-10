@@ -78,6 +78,9 @@ if(!function_exists("popdb")){
 										->yield()))
 							->yield();
 
+			if(str($model_name)->endsWith("*"))
+				return $model;
+
 			if(!is_null($id))
 				return $model::findById($id);
 
