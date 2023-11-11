@@ -28,7 +28,8 @@ class Facet implements ProviderInterface{
 			if(!$this->isQualifiedAlias($alias_ns)){
 
 				$model = db(str($alias_ns)->toSnake()->toLower()->yield());
-				$model->__construct(...$args);
+				if(!is_null($args))
+					$model->__construct(...$args);
 				
 				return $model;
 			}
