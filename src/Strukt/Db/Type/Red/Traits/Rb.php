@@ -53,6 +53,26 @@ trait Rb{
         $names = $inflector->singularize($name);
         $prop = reset($names);
 
+        $owner = str(get_called_class())
+                    ->replace(str(config("app.name"))
+                        ->concat("\\")
+                        ->yield(), "")
+                    ->toLower()
+                    ->yield();
+
+        $relation = sprintf("%s_%s", $owner, $name);
+        if(db()->getToolBox()->getWriter()->tableExists($relation)){
+
+            $own_relation = str($relation)->toCamel()->prepend("own")->yield();
+            $beans = $this->bean->unbox()->$own_relation;
+
+            return arr($beans)->each(function($idx, $bean) use($name){
+
+                return sync($bean)->$name;
+
+            })->yield();
+        }
+
         $own = str(ucfirst(str($prop)->toSnake()->yield()))->prepend("own")->yield();
         $beans = $this->unbox()->$own;
         if(empty($beans))
