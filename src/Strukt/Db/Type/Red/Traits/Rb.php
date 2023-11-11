@@ -47,7 +47,7 @@ trait Rb{
 
         $prop = $prop->concat("_id")->yield();
         if(property_exists($this, $prop))
-            return sync($this->bean);
+            return sync($this->bean->$name);
 
         $inflector = new EnglishInflector();
         $names = $inflector->singularize($name);
