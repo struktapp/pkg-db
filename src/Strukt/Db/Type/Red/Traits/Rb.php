@@ -60,15 +60,15 @@ trait Rb{
                     ->toLower()
                     ->yield();
 
-        $relation = sprintf("%s_%s", $owner, $name);
+        $relation = sprintf("%s_%s", $owner, $prop);
         if(db()->getToolBox()->getWriter()->tableExists($relation)){
 
             $own_relation = str($relation)->toCamel()->prepend("own")->yield();
             $beans = $this->bean->unbox()->$own_relation;
 
-            return arr($beans)->each(function($idx, $bean) use($name){
+            return arr($beans)->each(function($idx, $bean) use($prop){
 
-                return sync($bean)->$name;
+                return sync($bean)->$prop;
 
             })->yield();
         }
