@@ -141,6 +141,14 @@ if(!function_exists("db")){
 							->yield()))
 								->yield();
 
+		if(!is_null($model_name) && is_null($id)){
+
+			if(reg("db.which") == "pop")
+				return popdb($model_name);
+
+			return rb($model_name);			
+		}
+
 		if(!is_null($model_name) && !is_null($id)){
 
 			if(reg("db.which") == "pop")
