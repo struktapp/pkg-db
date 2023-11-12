@@ -27,7 +27,7 @@ if(!function_exists("rb")){
 	function rb(string $model_name = null, int $id = null){
 
 		if(!is_null($model_name) && is_null($id)) 
-			return R::dispense(str($model_name)->toLower()->yield())->box();
+			return R::getRedBean()->dispense(str($model_name)->toLower()->yield())->box();
 
         if(!is_null($id) && !is_null($model_name)) 
         	return sync(R::load($model_name, $id));
