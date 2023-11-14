@@ -7,13 +7,14 @@ use Strukt\Db\Type\Pop\Connection as PopDb;
 use Strukt\Db\Type\Red\Connection as RedDb;
 use Pop\Db\Sql\Schema as PopSchema;
 use Pop\Db\Adapter\Pdo as PopPdo;
+use RedBeanPHP\OODBBean as Bean;
 
 if(!function_exists("rb")){
 
 	/**
 	* Sync bean and model
 	*/
-	function sync($bean){
+	function sync(array|Bean $bean){
 
 		$model = $bean->box();
 		$model->id = $bean->id;
