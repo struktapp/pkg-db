@@ -16,6 +16,9 @@ if(!function_exists("rb")){
 	*/
 	function sync(array|Bean $bean){
 
+		if(is_array($bean))
+			return arr($bean)->each(fn($k, $v)=>sync($v))->yield();
+
 		$model = $bean->box();
 		$model->id = $bean->id;
 		foreach(get_object_vars($model) as $property=>$value)
