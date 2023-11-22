@@ -20,7 +20,7 @@ class Connection{
 		if(!R::testConnection()){
 
 			if(!is_null($file))
-				R::setup($file);
+				R::setup(sprintf("sqlite:%s", $file));
 
 			if(!is_null($dsn))
 				R::setup($dsn, $username, $password);
