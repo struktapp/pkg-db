@@ -22,7 +22,7 @@ class Connection{
 			if(!is_null($file)){
 
 				$path = sprintf("sqlite:%s/%s", env("root_dir"), $file);
-				R::setup(sprintf("sqlite:%s", $path));
+				R::setup($path);
 			}
 
 			if(is_null($file))
