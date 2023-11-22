@@ -11,12 +11,16 @@ use Strukt\Db\Type\Pop\Seeder;
 *
 * Usage:
 *
-*      db:seed [<direction>] [<table>]
+*      db:seed [<direction>] [<table>] [--filter <filter>]
 *
 * Arguments:
 *
 *      direction   Either up|down
 *      table       Table name
+*
+* Options:
+*
+*      --filter -f  Folder name
 */
 class DbSeed extends \Strukt\Console\Command{
 
@@ -33,7 +37,12 @@ class DbSeed extends \Strukt\Console\Command{
 		if(empty($table))
 			$table = "*";
 
-		$seeder = new Seeder(\Strukt\Fs::ds(sprintf("db/data/%s.json", $table)));
+		$path = str("db/data/");
+		$filter = $in->get("filter");
+		if(!empty($filter))
+			$path = \Strukt\Fs::ds($path->concat(sprintf("%s/%s.json", $filter, $table))->yield());
+
+		$seeder = new Seeder($path);
 		$seeder->$direction();
 
 		$out->add("Database successfully seeded!");

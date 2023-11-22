@@ -11,14 +11,25 @@ class Connection{
 
 	public function __construct(){
 
-		$this->adapter = Db::connect('pdo', [
+		$database = config('db.name');
+	    $username = config('db.username');
+	    $password = config('db.password');
+	    $host     = config('db.host');
+	    $type     = config('db.type');
+	    $file     = config("db.file");
 
-		    'database' => config('db.name'),
-		    'username' => config('db.username'),
-		    'password' => config('db.password'),
-		    'host'     => config('db.host'),
-		    'type'     => config('db.type')
-		]);
+		if(!is_null($database))
+			$this->adapter = Db::connect('pdo', [
+
+			    'database' => $database,
+			    'username' => $username,
+			    'password' => $password,
+			    'host'     => $host,
+			    'type'     => $type
+			]);
+
+		if(!is_null($file))
+			$this->adapter = Db::sqliteConnect(["database"=>$file]);
 
 		Record::setDb($this->adapter);
 	}

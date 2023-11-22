@@ -15,9 +15,16 @@ class Connection{
 		$dsn = sprintf('%s:host=%s;dbname=%s', config("db.type"), config("db.host"), config("db.name"));
 		$username = config("db.username");
 		$password = config("db.password");
+		$file = config("db.file");
 
-		if(!R::testConnection())
-			R::setup($dsn, $username, $password);
+		if(!R::testConnection()){
+
+			if(!is_null($file))
+				R::setup($file);
+
+			if(!is_null($dsn))
+				R::setup($dsn, $username, $password);
+		}
 	}
 
 	public function getPdo(){
