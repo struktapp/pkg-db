@@ -19,10 +19,13 @@ class Connection{
 
 		if(!R::testConnection()){
 
-			if(!is_null($file))
-				R::setup(sprintf("sqlite:%s", $file));
+			if(!is_null($file)){
 
-			if(!is_null($dsn))
+				$path = sprintf("sqlite:%s/%s", env("root_dir"), $file);
+				R::setup(sprintf("sqlite:%s", $path));
+			}
+
+			if(is_null($file))
 				R::setup($dsn, $username, $password);
 		}
 	}
