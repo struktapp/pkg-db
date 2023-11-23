@@ -21,7 +21,12 @@ class Connection{
 
 			if(!is_null($file)){
 
-				$path = sprintf("sqlite:%s/%s", env("root_dir"), $file);
+				$path = env("root_dir");
+				if(env("phar"))
+					$path = dirname(env("root_dir"));
+
+				$path = sprintf("sqlite:%s/%s", $path, $file);
+
 				R::setup($path);
 			}
 
