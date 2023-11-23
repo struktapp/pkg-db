@@ -25,8 +25,7 @@ class Connection{
 				if(env("phar"))
 					$path = dirname(env("root_dir"));
 
-				$path = sprintf("sqlite:%s/%s", $path, $file);
-				print_r($path);
+				$path = str(sprintf("sqlite:%s/%s", $path, $file))->replace("phar://","")->yield();
 
 				R::setup($path);
 			}
