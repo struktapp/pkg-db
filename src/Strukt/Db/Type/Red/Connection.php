@@ -26,6 +26,7 @@ class Connection{
 					$path = dirname(env("root_dir"));
 
 				$path = sprintf("sqlite:%s/%s", $path, $file);
+				print_r($path);
 
 				R::setup($path);
 			}
