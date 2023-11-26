@@ -22,7 +22,10 @@ class DbMakeFromModels extends \Strukt\Console\Command{
 	public function execute(Input $in, Output $out){
 
 		$app_name = config("app.name");
-		$files = fs(sprintf("app/src/%s", $app_name))->ls();
+		$fs = fs(sprintf("%s/app/src/%s", env("root_dir"), $app_name));
+
+		// $files = fs(sprintf("app/src/%s", $app_name))->ls();
+		$files = $fs->ls();
 		$models = arr($files)->each(fn($k, $v)=>str($v)->endsWith(".php")?trim($v, ".php"):null)->yield();
 
 		$model = $in->get("model");
