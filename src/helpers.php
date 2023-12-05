@@ -179,6 +179,87 @@ if(!function_exists("sm")){
 	}
 }
 
+if(!function_exists("pdo")){
+
+	function pdo(){
+
+		$db = str(reg("db.which"));
+
+		if($db->equals("pop"))
+			$pdo = db()->getConnection();
+
+		if($db->equals("rb"))
+			$pdo = db()->getDatabaseAdapter()->getDatabase()->getPdo();
+
+		$pdo->setAttribute(PDO::ATTR_PERSISTENT, true);
+		$pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, true);
+		$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+		return new class($pdo){
+
+			private $pdo;
+
+			public function __construct($pdo){
+
+				$this->pdo = $pdo;
+			}
+
+			public function begin(){
+
+				return $this->pdo->beginTransaction();
+			}
+
+			public function commit(){
+
+				return $this->pdo->commit();
+			}
+
+			public function rollback(){
+
+				return $this->pdo->rollBack();
+			}
+
+			public function getDb(){
+
+				return $this->pdo;
+			}
+
+			/**
+			* Copied from R::transaction for similar features
+			*/
+			public function transact(callable $callback){
+
+				static $depth = 0;
+				$result = null;
+				
+				try {
+
+					if($depth == 0)
+						$this->begin();
+					
+					$depth++;
+					$result = call_user_func($callback); //maintain 5.2 compatibility
+					$depth--;
+					if($depth == 0)
+						$this->commit();
+				
+				} 
+				catch(Exception $e){
+
+					$depth--;
+					if($depth == 0)
+						$this->rollback();
+			
+					throw $e;
+				}
+
+				return $result;
+			}
+		};
+	}
+}
+
 if(!function_exists("seed")){
 
 	function seed(string $table, array $data = []){
