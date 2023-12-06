@@ -226,12 +226,20 @@ if(!function_exists("pdo")){
 					return $this->pdo->commit();
 			}
 
-			public function rollback(){
+			public function rollback(\Exception $exception = null){
 
 				$this->counter->down();
 
 				if($this->counter->equals(0))
 					return $this->pdo->rollBack();
+
+				if(!$this->counter->equals(0)){
+
+					if(is_null($exception))
+						$exception = new \Exception("Rollback occured!");
+
+					throw $exception;
+				}
 			}
 
 			public function getDb(){
@@ -244,26 +252,17 @@ if(!function_exists("pdo")){
 			*/
 			public function transact(callable $callback){
 
-				// static $depth = 0;
 				$result = null;
 				
 				try {
 
-					// if($depth == 0)
-						$this->begin();
-					
-					// $depth++;
+					$this->begin();
 					$result = call_user_func($callback); //maintain 5.2 compatibility
-					// $depth--;
-					// if($depth == 0)
-						$this->commit();
-				
+					$this->commit();
 				} 
 				catch(Exception $e){
 
-					// $depth--;
-					// if($depth == 0)
-						$this->rollback();
+					$this->rollback();
 			
 					throw $e;
 				}
