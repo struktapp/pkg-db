@@ -181,6 +181,8 @@ if(!function_exists("sm")){
 
 if(!function_exists("pdo")){
 
+	counter(0, ".strukt-trx");
+
 	function pdo(){
 
 		$db = str(reg("db.which"));
@@ -202,22 +204,34 @@ if(!function_exists("pdo")){
 
 			public function __construct($pdo){
 
+				$this->counter = counters(".strukt-trx");
 				$this->pdo = $pdo;
 			}
 
 			public function begin(){
 
-				return $this->pdo->beginTransaction();
+				if($this->counter->equals(0))
+					$success = $this->pdo->beginTransaction();
+
+				$this->counter->up();
+
+				return $success;
 			}
 
 			public function commit(){
 
-				return $this->pdo->commit();
+				$this->counter->down();
+
+				if($this->counter->equals(0))
+					return $this->pdo->commit();
 			}
 
 			public function rollback(){
 
-				return $this->pdo->rollBack();
+				$this->counter->down();
+
+				if($this->counter->equals(0))
+					return $this->pdo->rollBack();
 			}
 
 			public function getDb(){
@@ -230,25 +244,25 @@ if(!function_exists("pdo")){
 			*/
 			public function transact(callable $callback){
 
-				static $depth = 0;
+				// static $depth = 0;
 				$result = null;
 				
 				try {
 
-					if($depth == 0)
+					// if($depth == 0)
 						$this->begin();
 					
-					$depth++;
+					// $depth++;
 					$result = call_user_func($callback); //maintain 5.2 compatibility
-					$depth--;
-					if($depth == 0)
+					// $depth--;
+					// if($depth == 0)
 						$this->commit();
 				
 				} 
 				catch(Exception $e){
 
-					$depth--;
-					if($depth == 0)
+					// $depth--;
+					// if($depth == 0)
 						$this->rollback();
 			
 					throw $e;

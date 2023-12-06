@@ -11,7 +11,7 @@ useDb("pop");
 
 pdo()->transact(function(){
 
-	$role = db("role",);
+	$role = db("role");
 	$role->name = "superadmin";
 	$role->save();
 
