@@ -210,6 +210,7 @@ if(!function_exists("pdo")){
 
 			public function begin(){
 
+				$success = null;
 				if($this->counter->equals(0))
 					$success = $this->pdo->beginTransaction();
 
