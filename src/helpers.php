@@ -244,11 +244,15 @@ if(!function_exists("pdo")){
 			}
 
 			public function execPreQuery(string $sql, array $params){
-
-				$stmt = $this->pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+				
+				$options = [];
+				if(arr($params)->isMap())
+					$options = [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY];
+						
+				$stmt = $this->pdo->prepare($sql, $options);
 				$stmt->execute($params);
 
-				return $stmt->fetchAll();
+				return $stmt->fetchAll(PDO::FETCH_ASSOC);
 			}
 
 			public function execQuery(string $sql, array $params = null){
