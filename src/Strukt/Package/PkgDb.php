@@ -30,7 +30,8 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 		$settings = array(
 			"App:Cli"=>array(
 				"providers"=>array(
-					\App\Provider\Facet::class
+					\App\Provider\Facet::class,
+					\App\Provider\Faker::class
 				),
 				"middlewares"=>array(),
 				"commands"=>array(

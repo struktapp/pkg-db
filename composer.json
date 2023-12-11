@@ -14,6 +14,7 @@
         "strukt/framework": "v1.1.7-alpha",
         "popphp/pop-db": "^5.4",
         "gabordemooij/redbean": "dev-master",
+        "tebazil/db-seeder": "^1.0",
         "symfony/string": "6.4.x-dev",
         "monolog/monolog":"*"
     },
