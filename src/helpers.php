@@ -317,13 +317,4 @@ if(!function_exists("faker")){
 
 		return $fake;
 	}
-
-	function faker(int $count, string $table, array $columns){
-
-		$faker = event("provider.faker")->exec();
-
-		$faker->table($table)->columns($columns)->rowQuantity($count);
-
-		return $faker;
-	}
 }

@@ -10,15 +10,9 @@ use Strukt\Contract\ProviderInterface;
 */
 class Faker implements ProviderInterface{
 
-	private $seeder;
-	private $generator;
 	private $faker;
 
 	public function __construct(){
-
-		$this->seeder = new \tebazil\dbseeder\Seeder(pdo()->getDb());
-		$this->generator = $this->seeder->getGeneratorConfigurator();
-		// $this->faker = $this->generator->getFakerConfigurator();
 		
 		$this->faker = new \Faker\Generator();
 		$this->faker->addProvider(new \Faker\Provider\en_US\Person($this->faker));
@@ -32,15 +26,9 @@ class Faker implements ProviderInterface{
 	public function register(){
 
 		$self = $this;
-
 		event("provider.fake", function() use($self){
 
 			return $self->faker;
-		});
-
-		event("provider.faker", function() use($self){
-
-			return $self->seeder;
 		});
 	}
 }
