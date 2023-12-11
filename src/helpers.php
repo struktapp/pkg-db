@@ -308,17 +308,22 @@ if(!function_exists("seed")){
 
 if(!function_exists("faker")){
 
-	function fake(string $var){
+	function fake(string $var = null){
 
 		$fake = event("provider.fake")->exec();
 
-		return $fake->$var;
+		if(is_null($var))
+			return $fake->$var;
+
+		return $fake;
 	}
 
 	function faker(int $count, string $table, array $columns){
 
 		$faker = event("provider.faker")->exec();
 
-		return $faker->table($table)->columns($columns)->rowQuantity($count);
+		$faker->table($table)->columns($columns)->rowQuantity($count);
+
+		return $faker
 	}
 }
