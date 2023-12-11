@@ -243,6 +243,11 @@ if(!function_exists("pdo")){
 				}
 			}
 
+			public function execQuery(string $sql){
+
+				return $this->pdo->query($sql, \PDO::FETCH_ASSOC)->fetchAll();
+			}
+
 			public function getDb(){
 
 				return $this->pdo;
