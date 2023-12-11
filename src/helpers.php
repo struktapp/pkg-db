@@ -312,7 +312,7 @@ if(!function_exists("faker")){
 
 		$fake = event("provider.fake")->exec();
 
-		if(is_null($var))
+		if(!is_null($var))
 			return $fake->$var;
 
 		return $fake;
