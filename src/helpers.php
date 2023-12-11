@@ -243,9 +243,20 @@ if(!function_exists("pdo")){
 				}
 			}
 
-			public function execQuery(string $sql){
+			public function execPreQuery(string $sql, array $params){
 
-				return $this->pdo->query($sql, \PDO::FETCH_ASSOC)->fetchAll();
+				$stmt = $this->pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+				$stmt->execute($params);
+
+				return $stmt->fetchAll();
+			}
+
+			public function execQuery(string $sql, array $params = null){
+
+				if(is_null($params))
+					return $this->pdo->query($sql, \PDO::FETCH_ASSOC)->fetchAll();
+
+				return $this->execPreQuery($sql, $params);
 			}
 
 			public function getDb(){
