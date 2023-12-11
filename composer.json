@@ -14,7 +14,7 @@
         "strukt/framework": "v1.1.7-alpha",
         "popphp/pop-db": "^5.4",
         "gabordemooij/redbean": "dev-master",
-        "fzaninotto/faker": "v1.9.2",
+        "fakerphp/faker": "v1.23.2",
         "symfony/string": "6.4.x-dev",
         "monolog/monolog":"*"
     },
