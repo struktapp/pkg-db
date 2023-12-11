@@ -324,6 +324,6 @@ if(!function_exists("faker")){
 
 		$faker->table($table)->columns($columns)->rowQuantity($count);
 
-		return $faker
+		return $faker;
 	}
 }
