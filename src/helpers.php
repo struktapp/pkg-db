@@ -302,7 +302,7 @@ if(!function_exists("seed")){
 
         $sql->insert($table)->values($data);
 
-        db()->query($sql);
+        return db()->query($sql);
 	}
 }
 
