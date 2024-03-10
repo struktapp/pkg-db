@@ -11,7 +11,7 @@ use RedBeanPHP\OODBBean as Bean;
 
 helper("pkg-db");
 
-if(!function_exists("rb")){
+if(!helper_add("rb")){
 
 	/**
 	* Sync bean and model
@@ -42,7 +42,7 @@ if(!function_exists("rb")){
 	}
 }
 
-if(!function_exists("schema")){
+if(!helper_add("schema")){
 
 	function schema(){
 
@@ -61,7 +61,7 @@ if(!function_exists("schema")){
 	}
 }
 
-if(!function_exists("popdb")){
+if(!helper_add("popdb")){
 
 	function makeModel(string $model){
 
@@ -94,7 +94,7 @@ if(!function_exists("popdb")){
 	}
 }
 
-if(!function_exists("useDb")){
+if(!helper_add("useDb")){
 
 	function useDb(string $db = "rb"){
 
@@ -134,7 +134,7 @@ if(!function_exists("useDb")){
 	}
 }
 
-if(!function_exists("db")){
+if(!helper_add("db")){
 
 	function db(string $model_name = null, int $id = null){
 
@@ -173,7 +173,7 @@ if(!function_exists("db")){
 	}
 }
 
-if(!function_exists("sm")){
+if(!helper_add("sm")){
 
 	function sm(string $table = null){
 
@@ -181,7 +181,7 @@ if(!function_exists("sm")){
 	}
 }
 
-if(!function_exists("pdo")){
+if(!helper_add("pdo")){
 
 	counter(0, ".strukt-trx");
 
@@ -296,7 +296,7 @@ if(!function_exists("pdo")){
 	}
 }
 
-if(!function_exists("seed")){
+if(!helper_add("seed")){
 
 	function seed(string $table, array $data = []){
 
@@ -308,7 +308,7 @@ if(!function_exists("seed")){
 	}
 }
 
-if(!function_exists("faker")){
+if(!helper_add("faker")){
 
 	function fake(string $var = null){
 
