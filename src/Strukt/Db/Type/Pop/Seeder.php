@@ -38,7 +38,7 @@ class Seeder{
 
 					if(str($field)->endsWith("_id")){
 
-						$table = trim($field, "_id");
+						$table = str($field)->replace("_id", "")->yield();
 						$rel_field = $seed["relations"][$table];
 						$set = makeModel($table)->findOne([$rel_field=>$value])->toArray();
 						$row[$field] = $set["id"];

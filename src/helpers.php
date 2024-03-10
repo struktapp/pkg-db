@@ -318,3 +318,207 @@ if(!function_exists("faker")){
 		return $fake;
 	}
 }
+
+if(helper_add("select")){
+
+	function select(string $fields){
+
+
+		$ops=fn(string $fields)=>arr(str($fields)->split(","))->each(function($k, $field){
+				
+			$field = str(trim($field));
+			if($field->startsWith("date(")){
+
+				$field = $field->replace(["date(",")"],"");
+				list($alias, $column) = $field->split(".");
+				$field = $field->prepend("DATE_FORMAT(")
+							->concat(',"%Y-%m-%d") as ')
+							->concat($column);
+			}
+
+			if($field->startsWith("money(")){
+
+				$field = $field->replace(["money(",")"],"");
+				list($alias, $column) = $field->split(".");
+				$field = $field->prepend("FORMAT(")
+							->concat(',2) as ')
+							->concat($column);
+			}
+			
+			return $field;
+		});
+
+		$sql = str(" SELECT ")->concat(implode(", ", $ops($fields)->yield()));
+
+		return new class($sql, $ops){
+
+			private $sql;
+			private $ops;
+
+			public function __construct($sql, callable $ops){
+
+				$this->sql = $sql;
+				$this->ops = $ops;
+			}
+
+			public function addSelect(string $fields){
+
+				$ops = $this->ops;
+				$this->sql = $this->sql->concat(" , ")->concat(implode(", ", $ops($fields)->yield()));
+
+				return $this;
+			}
+
+			public function from(string $tables){
+
+				$self = $this;
+				$this->sql = $this->sql->concat(str(" FROM ")->concat($tables));
+				return new class($self, $this->sql){
+
+					public function __construct($self, &$sql){
+
+						$this->sql = &$sql;
+						$this->self = $self;
+					}
+
+					public function leftjoin(string $join){
+
+						$this->sql = $this->sql->concat(" LEFT JOIN ")->concat($join);
+
+						return $this;
+					}
+
+					public function __call(string $name, array $args){
+
+						if(arr(["orWhere", "andWhere", "where"])->has($name) && !$this->sql->contains(" WHERE "))
+							return $this->self->where(...$args);
+
+						return $this->self->$name(...$args);
+					}
+
+					public function __toString(){
+
+						return $this->sql->yield();
+					}
+				};
+			}
+
+			public function where(string $condition){
+
+				$self = $this;
+				$this->sql = $this->sql->concat(" WHERE ")->concat($condition);
+				return new class($self, $this->sql){
+
+					public function __construct($self, &$sql){
+
+						$this->sql = &$sql;
+						$this->self = $self;
+					}
+
+					public function andWhere(string $condition){
+
+						$this->sql = $this->sql->concat(" AND ")->concat($condition);
+
+						return $this;
+					}
+
+					public function orWhere(string $condition){
+
+						$this->sql = $this->sql->concat(" OR ")->concat($condition);
+
+						return $this;
+					}
+
+					public function __call(string $name, array $args){
+
+						return $this->self->$name(...$args);
+					}
+
+					public function __toString(){
+
+						return $this->sql->yield();
+					}
+				};
+			}
+
+			public function page(int $page, int $perPage=10){
+
+				$offset = ($page - 1) * $perPage;
+
+				$this->sql = $this->sql->concat(sprintf(" LIMIT %d, %d", $offset, $perPage));
+
+				return $this;
+			}
+
+			public function orderBy(string $columns, string $order = "DESC"){
+
+				$this->sql = $this->sql->concat(sprintf(" ORDER BY %s %s", $columns, $order));
+
+				return $this;
+			}
+
+			public function __toString(){
+
+				return $this->sql->yield();
+			}
+		};
+	}	
+}
+
+if(helper_add("resultset")){
+
+	function resultset(string $sql, array $filter = []){
+
+		return new class($sql, $filter){
+
+			private $rs;
+
+			public function __construct(string $sql, array $filter){
+
+				$this->rs = pdo()->execQuery($sql, $filter);
+			}
+
+			public function normalize(string $field){
+
+				list($field, $type) = str($field)->split(":");
+
+				$type = str($type);
+				$rs = arr($this->rs)->each(function($k, $row)use($field, $type){
+
+					if($type->equals("date"))
+						$row[$field] = @when($row[$field])->when();
+
+					return $row;
+				});
+
+				$this->rs = $rs->yield();
+
+				return $this;
+			}
+
+			public function yield(){
+
+				return $this->rs;
+			}
+		};
+	}
+}
+
+if(helper_add("filter")){
+
+	function filter(array $fields, string $filter, bool $like=true){
+
+		$flike = fn($v)=>$v;
+		if($like)
+			$flike = fn($v)=>sprintf("%%%s%%", $v);
+
+		$ffilter=fn($filter)=>$filter;
+		if(!$like)
+			$ffilter = fn($filter)=>sprintf("%%%s%%", $filter);
+
+		if(!empty($filter))
+			return arr($fields)->each(fn($k,$v)=>[$flike($v)=>$ffilter($filter)])->level();
+
+		return [];
+	}
+}
