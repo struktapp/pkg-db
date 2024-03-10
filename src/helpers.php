@@ -9,6 +9,8 @@ use Pop\Db\Sql\Schema as PopSchema;
 use Pop\Db\Adapter\Pdo as PopPdo;
 use RedBeanPHP\OODBBean as Bean;
 
+helper("pkg-db");
+
 if(!function_exists("rb")){
 
 	/**
