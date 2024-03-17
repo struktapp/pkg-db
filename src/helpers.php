@@ -234,7 +234,9 @@ if(helper_add("pdo")){
 				// $this->counter->down();
 
 				// if($this->counter->equals(0))
-					return $this->pdo->rollBack();
+					// return $this->pdo->rollBack();
+
+				$this->pdo->rollBack();
 
 				// if(!$this->counter->equals(0)){
 
@@ -242,7 +244,7 @@ if(helper_add("pdo")){
 						$exception = new \Exception("Rollback occured!");
 
 					throw $exception;
-				}
+				// }
 			}
 
 			public function execPreQuery(string $sql, array $params){
