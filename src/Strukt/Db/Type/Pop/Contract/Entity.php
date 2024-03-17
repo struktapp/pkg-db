@@ -14,7 +14,7 @@ abstract class Entity extends \Pop\Db\Record{
 		parent::__construct($row);
 	}
 
-	public function save(){
+	public function save(?array $columns = null){
 
 		$this->counter = counters(".strukt-trx");
 		if($this->counter->equals(0))
