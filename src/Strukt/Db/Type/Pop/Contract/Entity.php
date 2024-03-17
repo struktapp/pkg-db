@@ -14,10 +14,10 @@ abstract class Entity extends \Pop\Db\Record{
 		parent::__construct($row);
 	}
 
-	public function save(?array $columns = null){
+	// public function save(?array $columns = null){
 
-		$this->counter = counters(".strukt-trx");
-		if($this->counter->equals(0))
-			return parent::save();
-	}
+	// 	$this->counter = counters(".strukt-trx");
+	// 	if($this->counter->equals(0))
+	// 		return parent::save();
+	// }
 }

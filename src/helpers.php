@@ -206,37 +206,37 @@ if(helper_add("pdo")){
 
 			public function __construct($pdo){
 
-				$this->counter = counters(".strukt-trx");
+				// $this->counter = counters(".strukt-trx");
 				$this->pdo = $pdo;
 			}
 
 			public function begin(){
 
-				$success = null;
-				if($this->counter->equals(0))
+				// $success = null;
+				// if($this->counter->equals(0))
 					$success = $this->pdo->beginTransaction();
 
-				$this->counter->up();
+				// $this->counter->up();
 
 				return $success;
 			}
 
 			public function commit(){
 
-				$this->counter->down();
+				// $this->counter->down();
 
-				if($this->counter->equals(0))
+				// if($this->counter->equals(0))
 					return $this->pdo->commit();
 			}
 
 			public function rollback(\Exception $exception = null){
 
-				$this->counter->down();
+				// $this->counter->down();
 
-				if($this->counter->equals(0))
+				// if($this->counter->equals(0))
 					return $this->pdo->rollBack();
 
-				if(!$this->counter->equals(0)){
+				// if(!$this->counter->equals(0)){
 
 					if(is_null($exception))
 						$exception = new \Exception("Rollback occured!");
