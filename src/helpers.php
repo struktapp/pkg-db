@@ -214,11 +214,13 @@ if(helper_add("pdo")){
 
 				// $success = null;
 				// if($this->counter->equals(0))
-					$success = $this->pdo->beginTransaction();
+					// $success = $this->pdo->beginTransaction();
 
 				// $this->counter->up();
 
-				return $success;
+				// return $success;
+
+				return $this->pdo->beginTransaction(); //success
 			}
 
 			public function commit(){
@@ -236,15 +238,23 @@ if(helper_add("pdo")){
 				// if($this->counter->equals(0))
 					// return $this->pdo->rollBack();
 
-				$this->pdo->rollBack();
-
 				// if(!$this->counter->equals(0)){
+
+					// if(is_null($exception))
+						// $exception = new \Exception("Rollback occured!");
+
+					// throw $exception;
+				// }
+
+				if($this->pdo->inTransaction()){
+					
+					$this->pdo->rollBack();
 
 					if(is_null($exception))
 						$exception = new \Exception("Rollback occured!");
 
 					throw $exception;
-				// }
+				}
 			}
 
 			public function execPreQuery(string $sql, array $params){
