@@ -231,7 +231,8 @@ if(helper_add("pdo")){
 					return $this->pdo->commit();
 			}
 
-			public function rollback(\Exception $exception = null){
+			// public function rollback(\Exception $exception = null){
+			public function rollback(){
 
 				// $this->counter->down();
 
@@ -250,10 +251,10 @@ if(helper_add("pdo")){
 					
 					$this->pdo->rollBack();
 
-					if(is_null($exception))
-						$exception = new \Exception("Rollback occured!");
+					// if(is_null($exception))
+						// $exception = new \Exception("Rollback occured!");
 
-					throw $exception;
+					// throw $exception;
 				// }
 			}
 
