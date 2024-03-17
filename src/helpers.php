@@ -198,7 +198,7 @@ if(helper_add("pdo")){
 		// $pdo->setAttribute(PDO::ATTR_PERSISTENT, true);
 		// $pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, true);
 		// $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
-		// $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		return new class($pdo){
 
