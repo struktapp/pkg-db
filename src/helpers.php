@@ -246,7 +246,7 @@ if(helper_add("pdo")){
 					// throw $exception;
 				// }
 
-				if($this->pdo->inTransaction()){
+				// if($this->pdo->inTransaction()){
 					
 					$this->pdo->rollBack();
 
@@ -254,7 +254,7 @@ if(helper_add("pdo")){
 						$exception = new \Exception("Rollback occured!");
 
 					throw $exception;
-				}
+				// }
 			}
 
 			public function execPreQuery(string $sql, array $params){
