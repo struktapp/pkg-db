@@ -53,8 +53,9 @@ class Seeder{
 					}
 				}
 
+				$hashfn = $this->hashfn;
 				if(array_key_exists("password", $row))
-					$row["password"] = $this->hashfn($row["password"]);
+					$row["password"] = $hashfn($row["password"]);
 
 				seed($seed["table"], array_merge($row, $generic));
 			}
