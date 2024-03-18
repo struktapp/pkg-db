@@ -6,6 +6,7 @@ class Seeder{
 
 	private $fs;
 	private $files = [];
+	private $hashfn = null;
 
 	public function __construct(string $path){
 
@@ -20,6 +21,13 @@ class Seeder{
 				$this->files[] = str($fpath)
 									->replace(\Strukt\Fs::ds(sprintf("%s/", $dirname)), "")
 									->yield();
+
+		$this->hashfn = fn($password)=>sha1($password);//default hash function
+	}
+
+	public function useHashFn(callable $fn){
+
+		$this->hashfn = $fn;
 	}
 
 	public function up(){
@@ -46,7 +54,7 @@ class Seeder{
 				}
 
 				if(array_key_exists("password", $row))
-					$row["password"] = sha1($row["password"]);
+					$row["password"] = $this->hashfn($row["password"]);
 
 				seed($seed["table"], array_merge($row, $generic));
 			}
