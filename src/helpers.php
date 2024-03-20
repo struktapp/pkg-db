@@ -203,59 +203,33 @@ if(helper_add("pdo")){
 		return new class($pdo){
 
 			private $pdo;
+			private $ignore;
 
 			public function __construct($pdo){
 
-				// $this->counter = counters(".strukt-trx");
 				$this->pdo = $pdo;
+				$this->igore = false;
 			}
 
 			public function begin(){
 
-				// $success = null;
-				// if($this->counter->equals(0))
-					// $success = $this->pdo->beginTransaction();
+				if(negate($this->pdo->inTransaction()))
+					$this->ignore = $this->pdo->beginTransaction(); //success
 
-				// $this->counter->up();
-
-				// return $success;
-
-				return $this->pdo->beginTransaction(); //success
+				return $this->ignore;
 			}
 
 			public function commit(){
 
-				// $this->counter->down();
-
-				// if($this->counter->equals(0))
+				if(negate($this->ignore))
 					return $this->pdo->commit();
+
+				return false;
 			}
 
-			// public function rollback(\Exception $exception = null){
 			public function rollback(){
-
-				// $this->counter->down();
-
-				// if($this->counter->equals(0))
-					// return $this->pdo->rollBack();
-
-				// if(!$this->counter->equals(0)){
-
-					// if(is_null($exception))
-						// $exception = new \Exception("Rollback occured!");
-
-					// throw $exception;
-				// }
-
-				// if($this->pdo->inTransaction()){
-					
-					$this->pdo->rollBack();
-
-					// if(is_null($exception))
-						// $exception = new \Exception("Rollback occured!");
-
-					// throw $exception;
-				// }
+	
+				$this->pdo->rollBack();
 			}
 
 			public function execPreQuery(string $sql, array $params){
