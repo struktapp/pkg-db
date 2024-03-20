@@ -208,7 +208,7 @@ if(helper_add("pdo")){
 			public function __construct($pdo){
 
 				$this->pdo = $pdo;
-				$this->igore = false;
+				$this->ignore = false;
 			}
 
 			public function begin(){
