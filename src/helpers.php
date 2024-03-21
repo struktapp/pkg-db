@@ -190,7 +190,7 @@ if(helper_add("pdo")){
 		$db = str(reg("db.which"));
 
 		if($db->equals("pop"))
-			$pdo = db()->getConnection();
+			$pdo = db();//->getConnection();
 
 		if($db->equals("rb"))
 			$pdo = db()->getDatabaseAdapter()->getDatabase()->getPdo();
