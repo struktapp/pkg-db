@@ -203,28 +203,20 @@ if(helper_add("pdo")){
 		return new class($pdo){
 
 			private $pdo;
-			private $ignore;
 
 			public function __construct($pdo){
 
 				$this->pdo = $pdo;
-				$this->ignore = false;
 			}
 
 			public function begin(){
-
-				if(negate($this->pdo->inTransaction()))
-					$this->ignore = $this->pdo->beginTransaction(); //success
-
-				return $this->ignore;
+				
+				return $this->pdo->beginTransaction(); //success
 			}
 
 			public function commit(){
 
-				if(negate($this->ignore))
-					return $this->pdo->commit();
-
-				return false;
+				return $this->pdo->commit();
 			}
 
 			public function rollback(){
