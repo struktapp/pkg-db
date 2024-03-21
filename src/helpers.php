@@ -190,7 +190,7 @@ if(helper_add("pdo")){
 		$db = str(reg("db.which"));
 
 		if($db->equals("pop"))
-			$pdo = db();//->getConnection();
+			$pdo = db()->getConnection();
 
 		if($db->equals("rb"))
 			$pdo = db()->getDatabaseAdapter()->getDatabase()->getPdo();
@@ -211,17 +211,17 @@ if(helper_add("pdo")){
 
 			public function begin(){
 				
-				return $this->pdo->beginTransaction(); //success
+				return db()->beginTransaction(); //success
 			}
 
 			public function commit(){
 
-				return $this->pdo->commit();
+				return db()->commit();
 			}
 
 			public function rollback(){
 	
-				$this->pdo->rollBack();
+				db()->rollback();
 			}
 
 			public function execPreQuery(string $sql, array $params){
