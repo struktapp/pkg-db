@@ -446,6 +446,88 @@ if(helper_add("select")){
 	}	
 }
 
+if(helper_add("modify")){
+
+	function modify(string $table){
+
+		return new class($table){
+
+			private $sql;
+
+			public function __construct(string $table){
+
+				$this->sql = str("UPDATE ")->concat($table);
+			}
+
+			public function set(string $modify){
+
+				$separator = preg_match("/\sSET\s/", $this->sql->yield());
+
+				$this->sql = $this->sql->concat($separator?", ":" SET ")->concat($modify);
+
+				return new class($this->sql, $this){
+
+					private $sql;
+					private $parent;
+
+					public function __construct($sql, $parent){
+
+						$this->parent = $parent;
+						$this->sql = $sql;
+					}
+
+					public function where(string $condition){
+
+						$where = " WHERE ";
+						if($this->sql->contains("WHERE"))
+							$where = " AND ";
+
+						$this->sql = $this->sql->concat($where)->concat($condition);
+
+						return $this;
+					}
+
+					public function andWhere(string $condition){
+
+						return $this->where($condition);
+					}
+
+					public function orWhere(string $condition){
+
+						$where = " WHERE ";
+						if($this->sql->contains("WHERE"))
+							$where = " OR ";
+
+						$this->sql = $this->sql->concat($where)->concat($condition);
+
+						return $this;
+					}
+
+					public function yield(){
+
+						return $this->sql->yield();
+					}
+
+					public function __call(string $name, array $args){
+
+						return $this->parent->$name(...$args);
+					}
+				};
+			}
+
+			public function addSet(string $modify){
+
+				return $this->set($modify);
+			}
+
+			public function yield(){
+
+				return $this->sql->yield();
+			}
+		};
+	}
+}
+
 if(helper_add("resultset")){
 
 	function resultset(string $sql, array $filter = []){
