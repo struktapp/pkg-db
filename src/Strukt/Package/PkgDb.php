@@ -15,7 +15,8 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 				"lib/App/Command/Db/DbMakeModels.php",
 		        "lib/App/Command/Db/ModelMake.php",
 		        "lib/App/Command/Db/DbMakeFromModels.php",
-		        "lib/App/Command/Db/DbSeed.php",
+		        "lib/App/Command/Db/DbSeedFile.php",
+		        "lib/App/Command/Db/DbSeedSet.php",
 		        "lib/App/Command/Db/DbWipe.php",
 		        "lib/App/Provider/Facet.php",
 		        "app/src/App/User.sgf",
@@ -38,7 +39,8 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 					\App\Command\Db\DbMakeModels::class,
 			        \App\Command\Db\ModelMake::class,
 			        \App\Command\Db\DbMakeFromModels::class,
-			        \App\Command\Db\DbSeed::class,
+			        \App\Command\Db\DbSeedFile::class,
+			        \App\Command\Db\DbSeedSet::class,
 			        \App\Command\Db\DbWipe::class
 				)
 			),
