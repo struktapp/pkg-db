@@ -19,9 +19,12 @@ class Seeder{
 		if(!$this->fs->isDir("."))
 			raise("Folder does not exists!");
 
-		if(str($path)->endsWith(".json"))
+		if(str($path)->endsWith(".json")){
+
+			$dirname = dirname($path);
 			if(fs()->isPath($path))
-				$this->files[] = $path;
+				$this->files[] = basename($path);
+		}
 
 		if(empty($this->files))
 			if($this->fs->isFile("_order.json"))
