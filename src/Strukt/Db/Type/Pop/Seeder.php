@@ -19,8 +19,13 @@ class Seeder{
 		if(!$this->fs->isDir("."))
 			raise("Folder does not exists!");
 
-		if($this->fs->isFile("_order.json"))
-			$this->files = json($this->fs->cat("_order.json"))->decode();
+		if(str($path)->endsWith(".json"))
+			if(fs()->isPath($path))
+				$this->files[] = $path;
+
+		if(empty($this->files))
+			if($this->fs->isFile("_order.json"))
+				$this->files = json($this->fs->cat("_order.json"))->decode();
 
 		if(empty($this->files))
 			foreach(glob($path) as $fpath)
