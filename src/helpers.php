@@ -445,9 +445,16 @@ if(helper_add("select")){
 				return $this;
 			}
 
-			public function union($all = false){
+			public function union(string $sql){
 
-				$this->sql = $this->sql->concat($all?" UNION ALL ":" UNION ");
+				$this->sql = $this->sql->concat(" UNION ")->concat($sql);
+
+				return $this;
+			}
+
+			public function unionAll(string $sql){
+
+				$this->sql = $this->sql->concat(" UNION ALL ")->concat($sql);
 
 				return $this;
 			}
