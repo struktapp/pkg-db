@@ -445,6 +445,13 @@ if(helper_add("select")){
 				return $this;
 			}
 
+			public function union($all = false){
+
+				$this->sql = $this->sql->concat($all?" UNION ALL ":" UNION ");
+
+				return $this;
+			}
+
 			public function __toString(){
 
 				return $this->sql->yield();
