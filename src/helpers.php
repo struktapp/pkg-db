@@ -431,6 +431,13 @@ if(helper_add("select")){
 				return $this;
 			}
 
+			public function groupBy(string $columns){
+
+				$this->sql = $this->sql->concat(sprintf(" GROUP BY %s", $columns));
+
+				return $this;
+			}
+
 			public function orderBy(string $columns, string $order = "DESC"){
 
 				$this->sql = $this->sql->concat(sprintf(" ORDER BY %s %s", $columns, $order));
