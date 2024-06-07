@@ -244,6 +244,20 @@ if(helper_add("pdo")){
 				return $this->execPreQuery($sql, $params);
 			}
 
+			public function qMarks(array $params){
+
+				$qMarks = str_repeat('?,', count($params) - 1) . '?';
+
+				return $qMarks;
+			}
+
+			public function execPrep(string $sql, array $params = null){
+
+				$params =  array_values(arr($params)->level());
+
+				return $this->execPreQuery($sql, $params);
+			}
+
 			public function getDb(){
 
 				return $this->pdo;
