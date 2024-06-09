@@ -331,6 +331,15 @@ if(helper_add("select")){
 							->concat($column);
 			}
 
+			if($field->startsWith("datetime(")){
+
+				$field = $field->replace(["datetime(",")"],"");
+				list($alias, $column) = $field->split(".");
+				$field = $field->prepend("DATE_FORMAT(")
+							->concat(',"%Y-%m-%d %H:%i:%s") as ')
+							->concat($column);
+			}
+
 			if($field->startsWith("money(")){
 
 				$field = $field->replace(["money(",")"],"");
