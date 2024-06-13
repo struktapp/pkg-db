@@ -589,19 +589,19 @@ if(helper_add("modify")){
 
 if(helper_add("resultset")){
 
-	function resultset(string $sql, array $filter = []){
+	function resultset(mixed $sql, array $filter = []){
 
 		return new class($sql, $filter){
 
 			private $rs;
 
-			public function __construct(string $sql, array $filter){
+			public function __construct(mixed $sql, array $filter){
 
 				if($sql->isPrep())
-					$this->rs = pdo()->execPrep($sql, $filter);
+					$this->rs = pdo()->execPrep((string)$sql, $filter);
 
 				if(negate($sql->isPrep()))
-					$this->rs = pdo()->execQuery($sql, $filter);
+					$this->rs = pdo()->execQuery((string)$sql, $filter);
 			}
 
 			public function normalize(string $field){
