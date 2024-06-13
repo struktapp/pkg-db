@@ -596,7 +596,11 @@ if(helper_add("resultset")){
 
 			public function __construct(string $sql, array $filter){
 
-				$this->rs = pdo()->execQuery($sql, $filter);
+				if($sql->isPrep())
+					$this->rs = pdo()->execPrep($sql, $filter);
+
+				if(negate($sql->isPrep()))
+					$this->rs = pdo()->execQuery($sql, $filter);
 			}
 
 			public function normalize(string $field){
