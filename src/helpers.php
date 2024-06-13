@@ -358,11 +358,13 @@ if(helper_add("select")){
 
 			private $sql;
 			private $ops;
+			private $prep;
 
 			public function __construct($sql, callable $ops){
 
 				$this->sql = $sql;
 				$this->ops = $ops;
+				$this->prep = false;
 			}
 
 			public function addSelect(string $fields){
@@ -377,12 +379,13 @@ if(helper_add("select")){
 
 				$self = $this;
 				$this->sql = $this->sql->concat(str(" FROM ")->concat($tables));
-				return new class($self, $this->sql){
+				return new class($self, $this->sql, $this->prep){
 
-					public function __construct($self, &$sql){
+					public function __construct($self, &$sql, &$prep){
 
 						$this->sql = &$sql;
 						$this->self = $self;
+						$this->prep = &$prep;
 					}
 
 					public function leftjoin(string $join){
@@ -411,17 +414,20 @@ if(helper_add("select")){
 
 				$self = $this;
 				$this->sql = $this->sql->concat(" WHERE ")->concat($condition);
-				return new class($self, $this->sql){
+				return new class($self, $this->sql, $this->prep){
 
-					public function __construct($self, &$sql){
+					public function __construct($self, &$sql, &$prep){
 
 						$this->sql = &$sql;
 						$this->self = $self;
+						$this->prep = &$prep;
 					}
 
 					public function andWhere(string $condition){
 
 						$this->sql = $this->sql->concat(" AND ")->concat($condition);
+						if(str($condition)->contains("?"))
+							$this->prep = true;
 
 						return $this;
 					}
@@ -429,6 +435,8 @@ if(helper_add("select")){
 					public function orWhere(string $condition){
 
 						$this->sql = $this->sql->concat(" OR ")->concat($condition);
+						if(str($condition)->contains("?"))
+							$this->prep = true;
 
 						return $this;
 					}
@@ -480,6 +488,11 @@ if(helper_add("select")){
 				$this->sql = $this->sql->concat(" UNION ALL ")->concat($sql);
 
 				return $this;
+			}
+
+			public function isPrep(){
+
+				return $this->prep;
 			}
 
 			public function __toString(){
