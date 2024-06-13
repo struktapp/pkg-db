@@ -379,13 +379,12 @@ if(helper_add("select")){
 
 				$self = $this;
 				$this->sql = $this->sql->concat(str(" FROM ")->concat($tables));
-				return new class($self, $this->sql, $this->prep){
+				return new class($self, $this->sql){
 
-					public function __construct($self, &$sql, &$prep){
+					public function __construct($self, &$sql){
 
 						$this->sql = &$sql;
 						$this->self = $self;
-						$this->prep = &$prep;
 					}
 
 					public function leftjoin(string $join){
@@ -414,20 +413,22 @@ if(helper_add("select")){
 
 				$self = $this;
 				$this->sql = $this->sql->concat(" WHERE ")->concat($condition);
-				return new class($self, $this->sql, $this->prep){
+				if(str($condition)->contains("?"))
+					$this->prep = true;
 
-					public function __construct($self, &$sql, &$prep){
+				return new class($self, $this->sql){
+
+					public function __construct($self, &$sql){
 
 						$this->sql = &$sql;
 						$this->self = $self;
-						$this->prep = &$prep;
 					}
 
 					public function andWhere(string $condition){
 
 						$this->sql = $this->sql->concat(" AND ")->concat($condition);
 						if(str($condition)->contains("?"))
-							$this->prep = true;
+							$this->self->prep = true;
 
 						return $this;
 					}
@@ -436,7 +437,7 @@ if(helper_add("select")){
 
 						$this->sql = $this->sql->concat(" OR ")->concat($condition);
 						if(str($condition)->contains("?"))
-							$this->prep = true;
+							$this->self->prep = true;
 
 						return $this;
 					}
