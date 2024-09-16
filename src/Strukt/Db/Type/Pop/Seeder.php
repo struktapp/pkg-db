@@ -31,7 +31,8 @@ class Seeder{
 				$this->files = json($this->fs->cat("_order.json"))->decode();
 
 		if(empty($this->files))
-			foreach(glob($path) as $fpath)
+			// foreach(glob($path) as $fpath)
+			foreach(fs($path)->ls() as $fpath)
 				if(str($fpath)->endsWith(".json"))
 					$this->files[] = str($fpath)
 									->replace(\Strukt\Fs::ds(sprintf("%s/", $dirname)), "")
