@@ -4,6 +4,7 @@ namespace Strukt\Db\Type\Pop;
 
 use Pop\Db\Db;
 use Pop\Db\Record;
+use Strukt\Fs;
 
 class Connection{
 
@@ -28,11 +29,16 @@ class Connection{
 			    'type'     => $type
 			]);
 
-		if(!is_null($file))
+		if(!is_null($file)){
+
+			if(phar()->active())
+				$file = Fs::ds(sprintf("%s/%s", dirname(phar()->adapt()), $file));
+
 			$this->adapter = Db::sqliteConnect([
 
-				"database"=>phar(sprintf("../%s", $file))->adapt()
+				"database"=>$file
 			]);
+		}
 
 		Record::setDb($this->adapter);
 	}
