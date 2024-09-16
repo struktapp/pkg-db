@@ -30,6 +30,8 @@ class Seeder{
 			if($this->fs->isFile("_order.json"))
 				$this->files = json($this->fs->cat("_order.json"))->decode();
 
+		dd(fs()->ls($path));
+
 		if(empty($this->files))
 			// foreach(glob($path) as $fpath)
 			foreach(fs()->ls($path) as $fpath)
