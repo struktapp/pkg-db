@@ -31,8 +31,11 @@ class Connection{
 
 		if(!is_null($file)){
 
-			if(phar()->active())
-				$file = str(Fs::ds(sprintf("%s/%s", dirname(phar()->adapt()), $file)))->replace("phar://", "")->yield();
+			$path = env("root_dir");
+			if(env("phar"))
+				$path = dirname(env("root_dir"));
+
+			$path = str(sprintf("sqlite:%s/%s", $path, $file))->replace("phar://","")->yield();
 
 			$this->adapter = Db::sqliteConnect([
 
