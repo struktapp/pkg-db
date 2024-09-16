@@ -34,7 +34,7 @@ class DbSeedSet extends \Strukt\Console\Command{
 
 		$path = str(phar("db/data/")->adapt());
 		$filter = $in->get("set");
-		$path = \Strukt\Fs::ds($path->concat(sprintf("%s/*", $filter))->yield());
+		$path = \Strukt\Fs::ds($path->concat(sprintf("%s/", $filter))->yield());
 
 		$seeder = new Seeder($path, $filter);
 		$seeder->useHashFn(fn($password)=>bcry($password)->encode());
