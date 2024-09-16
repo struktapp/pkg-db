@@ -32,7 +32,7 @@ class DbSeedSet extends \Strukt\Console\Command{
 		if(!in_array($direction, ["up", "down"]))
 			raise("Allowed directions up|down!");
 
-		$path = str("db/data/");
+		$path = str(phar("db/data/")->adapt());
 		$filter = $in->get("set");
 		$path = \Strukt\Fs::ds($path->concat(sprintf("%s/*", $filter))->yield());
 
