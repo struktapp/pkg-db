@@ -29,7 +29,10 @@ class Connection{
 			]);
 
 		if(!is_null($file))
-			$this->adapter = Db::sqliteConnect(["database"=>$file]);
+			$this->adapter = Db::sqliteConnect([
+
+				"database"=>phar(sprintf("../%s", $file))->adapt()
+			]);
 
 		Record::setDb($this->adapter);
 	}
