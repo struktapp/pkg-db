@@ -32,7 +32,7 @@ class Connection{
 		if(!is_null($file)){
 
 			if(phar()->active())
-				$file = Fs::ds(sprintf("%s/%s", dirname(phar()->adapt()), $file));
+				$file = str(Fs::ds(sprintf("%s/%s", dirname(phar()->adapt()), $file)))->replace("phar://", "")->yield();
 
 			$this->adapter = Db::sqliteConnect([
 
