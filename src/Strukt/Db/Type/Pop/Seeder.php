@@ -15,7 +15,8 @@ class Seeder{
 
 		extract(pathinfo($path));
 
-		$this->fs = fs($dirname);
+		// $this->fs = fs($dirname);
+		$this->fs = fs(sprintf("%s/%s", $dirname, $basename));
 		if(!$this->fs->isDir("."))
 			raise("Folder does not exists!");
 
@@ -56,6 +57,7 @@ class Seeder{
 		foreach($this->files as $file){
 
 			echo(str("table:")->concat(color("yellow", $file))->concat("\n")->yield());
+			// print_r($this->fs->path("/"));
 			$seed = json($this->fs->cat($file))->decode();
 
 			$generic = [];
