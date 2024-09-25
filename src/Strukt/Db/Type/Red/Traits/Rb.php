@@ -25,13 +25,13 @@ trait Rb{
         return $props;
     }
 
-    public function save(){
+    public function save():int{
 
         foreach(get_object_vars($this) as $property=>$value)
             if($property != 'bean')
                 $this->bean->$property = $value;
 
-        R::store($this->bean);
+        return R::store($this->bean);
     }
 
     public function toArray(){

@@ -111,6 +111,9 @@ if(helper_add("useDb")){
 
 		return true;
 	}
+}
+
+if(helper_add("switchDb")){
 
 	function switchDb(){
 
@@ -646,5 +649,15 @@ if(helper_add("filter")){
 			return arr($fields)->each(fn($k,$v)=>[$flike($v)=>$ffilter($filter)])->level();
 
 		return [];
+	}
+}
+
+if(helper_add("last")){
+
+	function last(string $tbl, int $offset = 1){
+
+		$rs = db()->find($tbl, sprintf("order by id desc limit %d", $offset));
+
+		return sync($rs);
 	}
 }
