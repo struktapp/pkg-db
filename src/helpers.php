@@ -654,10 +654,24 @@ if(helper_add("filter")){
 
 if(helper_add("last")){
 
-	function last(string $tbl, int $offset = 1){
+	function last(string $tbl, int $count = 10, int $start_at = 1){
 
-		$rs = db()->find($tbl, sprintf("order by id desc limit %d", $offset));
+		$page = page($count, $start_at);
+
+		extract($page);
+
+		$rs = db()->find($tbl, sprintf("order by id desc limit %d, %d", $limit, $offset));
 
 		return sync($rs);
+	}
+}
+
+if(helper_add("page")){
+
+	function page(int $page=1, int $perPage=10){
+
+		$offset = ($page - 1) * $perPage;
+
+		return ["offset"=>$offset, "limit"=>$perPage];
 	}
 }
