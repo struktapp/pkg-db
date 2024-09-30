@@ -656,11 +656,11 @@ if(helper_add("last")){
 
 	function last(string $tbl, int $count = 10, int $start_at = 1){
 
-		$page = page($count, $start_at);
+		$page = page($start_at, $count);
 
 		extract($page);
 
-		$rs = db()->find($tbl, sprintf("order by id desc limit %d, %d", $limit, $offset));
+		$rs = db()->find($tbl, sprintf("order by id desc limit %d, %d", $offset, $limit));
 
 		return sync($rs);
 	}
