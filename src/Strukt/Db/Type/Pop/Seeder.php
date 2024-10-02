@@ -15,8 +15,8 @@ class Seeder{
 
 		extract(pathinfo($path));
 
-		// $this->fs = fs($dirname);
-		$this->fs = fs(sprintf("%s/%s", $dirname, $basename));
+		$this->fs = fs($dirname);
+		// $this->fs = fs(sprintf("%s/%s", $dirname, $basename));
 		if(!$this->fs->isDir("."))
 			raise("Folder does not exists!");
 
