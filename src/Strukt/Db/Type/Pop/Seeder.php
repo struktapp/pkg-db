@@ -7,16 +7,15 @@ class Seeder{
 	private $fs;
 	private $files = [];
 	private $hashfn = null;
-	private $caption = null;
+	private $filter = null;
 
-	public function __construct(string $path, string $caption = null){
+	public function __construct(string $path, string $filter = null){
 
-		$this->caption = $caption;
+		$this->filter = $filter;
 
 		extract(pathinfo($path));
 
 		$this->fs = fs($dirname);
-		// $this->fs = fs(sprintf("%s/%s", $dirname, $basename));
 		if(!$this->fs->isDir("."))
 			raise("Folder does not exists!");
 
@@ -31,10 +30,7 @@ class Seeder{
 			if($this->fs->isFile("_order.json"))
 				$this->files = json($this->fs->cat("_order.json"))->decode();
 
-		// dd(fs()->ls($path));
-
 		if(empty($this->files))
-			// foreach(glob($path) as $fpath)
 			foreach(fs()->ls($path) as $fpath)
 				if(str($fpath)->endsWith(".json"))
 					$this->files[] = str($fpath)
@@ -51,14 +47,16 @@ class Seeder{
 
 	public function up(){
 
-		if(negate(is_null($this->caption)))
-			echo(str("\nFacet:")->concat(colorln("blue", $this->caption))->concat("\n")->yield());
+		if(negate(is_null($this->filter)))
+			echo(str("\nFacet:")->concat(colorln("blue", $this->filter))->concat("\n")->yield());
 
 		foreach($this->files as $file){
 
+			$path = ds(sprintf("%s/%s", $this->filter, $file));
+
 			echo(str("table:")->concat(color("yellow", $file))->concat("\n")->yield());
-			// print_r($this->fs->path("/"));
-			$seed = json($this->fs->cat($file))->decode();
+
+			$seed = json($this->fs->cat($path))->decode();
 
 			$generic = [];
 			if(array_key_exists("generic", $seed))
