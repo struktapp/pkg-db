@@ -12,14 +12,11 @@
     "minimum-stability":"dev",
     "require": {
         "strukt/framework": "v1.1.7-alpha",
-        "popphp/pop-db": "^6.5.5",
+        "popphp/pop-db": "^6.5.11",
         "gabordemooij/redbean": "dev-master",
         "symfony/string": "6.4.x-dev",
         "monolog/monolog":"*",
         "fakerphp/faker":"*"
-    },
-    "require-dev": {
-        "strukt/framework": "dev-master"
     },
     "autoload": {
         
