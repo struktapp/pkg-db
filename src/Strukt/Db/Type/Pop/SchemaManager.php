@@ -74,6 +74,8 @@ class SchemaManager{
 			raise("Argument [attr] must be an array!");
 
 		$this->builder->addColumn($column, $type, $size, $precision, $attr);
+		if($options["default"]??false)
+			$this->builder->defaultIs($options["default"]);
 
 		return $this;
 	}
@@ -88,6 +90,8 @@ class SchemaManager{
 			raise("Argument [attr] must be an array!");
 
 		$this->builder->modifyColumn($column, $column, $type, $size, $precision);
+		if($options["default"]??false)
+			$this->builder->defaultIs($options["default"]);
 
 		return $this;
 	}
