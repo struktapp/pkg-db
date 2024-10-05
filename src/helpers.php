@@ -201,15 +201,19 @@ if(helper_add("pdo")){
 		// $pdo->setAttribute(PDO::ATTR_PERSISTENT, true);
 		// $pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, true);
 		// $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		return new class($pdo){
+		$is_sqlite = reg("config")->exists("db.file");
+		if(negate($is_sqlite))
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+		return new class($pdo, $is_sqlite){
 
 			private $pdo;
 
-			public function __construct($pdo){
+			public function __construct($pdo, $is_sqlite){
 
 				$this->pdo = $pdo;
+				$this->is_sqlite = $is_sqlite;
 			}
 
 			public function begin(){
@@ -241,8 +245,21 @@ if(helper_add("pdo")){
 
 			public function execQuery(string $sql, array $params = null){
 
-				if(is_null($params))
-					return $this->pdo->query($sql, \PDO::FETCH_ASSOC)->fetchAll();
+				if(is_null($params)){
+
+					if(negate($this->is_sqlite))
+						return $this->pdo->query($sql, \PDO::FETCH_ASSOC)->fetchAll();
+
+					if($this->is_sqlite){
+
+						$rs = [];
+						$res = $this->pdo->query($sql);//Sqlite3Result
+						while($row = $res->fetchArray(SQLITE3_ASSOC))
+							$rs[] = $row;
+
+						return $rs;
+					}
+				}
 
 				return $this->execPreQuery($sql, $params);
 			}
