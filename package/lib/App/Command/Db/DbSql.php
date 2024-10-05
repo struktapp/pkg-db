@@ -26,10 +26,11 @@ class DbSql extends \Strukt\Console\Command{
 
 			$rs = pdo()->execQuery($sql);
 
-			if(str($sql)->toLower()->startsWith("select")  || 
-				str($sql)->toLower()->startsWith("show")   ||
-				str($sql)->toLower()->startsWith("pragma") ||
-				str($sql)->toLower()->startsWith("analyze"))
+			$sql = str($sql)->toLower();
+			if($sql->startsWith("select")  || 
+				$sql->startsWith("show")   ||
+				$sql->startsWith("pragma") ||
+				$sql->startsWith("analyze"))
 					$out->add(json($rs)->pp());
 		}
 		catch(\Exception $e){
