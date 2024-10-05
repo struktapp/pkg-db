@@ -20,6 +20,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 		        "lib/App/Command/Db/DbWipe.php",
 		        "lib/App/Command/Db/DbSql.php",
 		        "lib/App/Provider/Facet.php",
+		        "lib/App/Provider/Faker.php",
 		        "app/src/App/User.sgf",
 		        "db/data/.keep",
 		        "cfg/db.ini"
@@ -43,6 +44,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 			        \App\Command\Db\DbSeedFile::class,
 			        \App\Command\Db\DbSeedSet::class,
 			        \App\Command\Db\DbWipe::class
+			        \App\Command\Db\DbSql::class
 				)
 			),
 			"App:Idx"=>array(
