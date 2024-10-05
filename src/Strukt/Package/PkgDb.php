@@ -18,6 +18,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 		        "lib/App/Command/Db/DbSeedFile.php",
 		        "lib/App/Command/Db/DbSeedSet.php",
 		        "lib/App/Command/Db/DbWipe.php",
+		        "lib/App/Command/Db/DbSql.php",
 		        "lib/App/Provider/Facet.php",
 		        "app/src/App/User.sgf",
 		        "db/data/.keep",
