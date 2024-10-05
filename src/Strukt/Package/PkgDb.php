@@ -43,7 +43,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 			        \App\Command\Db\DbMakeFromModels::class,
 			        \App\Command\Db\DbSeedFile::class,
 			        \App\Command\Db\DbSeedSet::class,
-			        \App\Command\Db\DbWipe::class
+			        \App\Command\Db\DbWipe::class,
 			        \App\Command\Db\DbSql::class
 				)
 			),
