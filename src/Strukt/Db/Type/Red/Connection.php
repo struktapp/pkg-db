@@ -39,4 +39,21 @@ class Connection{
 
 		return R::getDatabaseAdapter()->getDatabase()->getPdo();
 	}
+
+	public function useLogger(Psr\Log\LoggerInterface $logger){
+
+		R::getDatabaseAdapter()->getDatabase()->setLogger(new class($logger) implements \RedBeanPHP\Logger{
+
+		  	private $logger;
+		  	public function __construct(Psr\Log\LoggerInterface $logger) {
+
+		  	 	$this->logger = $logger->withName('sql'); 
+		  	}
+		  	
+		  	public function log(){ 
+
+		  		$this->logger->debug(...func_get_args()); 
+		  	}
+		});
+	}
 }
