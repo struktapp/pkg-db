@@ -66,6 +66,14 @@ class Seeder{
 
 				foreach($row as $field=>$value){
 
+					if(str($field)->equals("token")){
+
+						$token = token($value);
+						if($token->has("when"))
+							if(str($token->get("when"))->equals("now"))
+								$row[$field] = $token->set("when", time())->yield();
+					}
+
 					if(str($value)->startsWith("strukt[file]://")){
 
 						$value = fs()->cat(str($value)->replace("strukt[file]://","")->yield());
