@@ -65,6 +65,13 @@ class Seeder{
 			foreach($seed["data"] as $idx=>$row){
 
 				foreach($row as $field=>$value){
+
+					if(str($value)->startsWith("strukt[file]://")){
+
+						$value = fs()->cat(str($value)->replace("strukt[file]://","")->yield());
+						$row[$field] = $value;
+					}
+
 					if(str($field)->endsWith("_id")){
 
 						$table = str($field)->replace("_id", "")->yield();
