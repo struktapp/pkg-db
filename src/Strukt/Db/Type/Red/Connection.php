@@ -3,7 +3,11 @@
 namespace Strukt\Db\Type\Red;
 
 use RedBeanPHP\R;
+use Psr\Log\LoggerInterface;
 
+ /** 
+ * @author Moderator <pitsolu@gmail.com>
+ */
 class Connection{
 
 	public function __construct(){
@@ -35,22 +39,37 @@ class Connection{
 		}
 	}
 
-	public function getPdo(){
+	/**
+	 * @return \Pdo
+	 */
+	public function getPdo():\Pdo{
 
 		return R::getDatabaseAdapter()->getDatabase()->getPdo();
 	}
 
-	public function useLogger(Psr\Log\LoggerInterface $logger){
+	/**
+	 * @param \Psr\Log\LoggerInterface $logger
+	 * 
+	 * @return void
+	 */
+	public function useLogger(LoggerInterface $logger):void{
 
 		R::getDatabaseAdapter()->getDatabase()->setLogger(new class($logger) implements \RedBeanPHP\Logger{
 
 		  	private $logger;
-		  	public function __construct(Psr\Log\LoggerInterface $logger) {
+
+		  	/**
+			 * @param \Psr\Log\LoggerInterface $logger
+			 */
+		  	public function __construct(LoggerInterface $logger) {
 
 		  	 	$this->logger = $logger->withName('sql'); 
 		  	}
 		  	
-		  	public function log(){ 
+		  	/**
+		  	 * @return void
+		  	 */
+		  	public function log():void{ 
 
 		  		$this->logger->debug(...func_get_args()); 
 		  	}

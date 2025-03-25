@@ -2,6 +2,9 @@
 
 namespace Strukt\Db;
 
+/**
+* @author Moderator <pitsolu@gmail.com>
+*/
 class FieldType{
 
 	public static $types = array(

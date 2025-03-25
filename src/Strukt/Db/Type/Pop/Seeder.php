@@ -2,6 +2,11 @@
 
 namespace Strukt\Db\Type\Pop;
 
+/**
+ * PopDb Seeder 
+ * 
+ * @author Moderator <pitsolu@gmail.com>
+ */
 class Seeder{
 
 	private $fs;
@@ -9,6 +14,10 @@ class Seeder{
 	private $hashfn = null;
 	private $filter = null;
 
+	/**
+	 * @param string $path
+	 * @param string $filter
+	 */
 	public function __construct(string $path, string $filter = null){
 
 		$this->filter = $filter;
@@ -40,11 +49,19 @@ class Seeder{
 		$this->hashfn = fn($password)=>sha1($password);//default hash function
 	}
 
-	public function useHashFn(callable $fn){
+	/**
+	 * @param callable $fn
+	 * 
+	 * @return void
+	 */
+	public function useHashFn(callable $fn):void{
 
 		$this->hashfn = $fn;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function up(){
 
 		if(negate(is_null($this->filter)))
@@ -98,7 +115,10 @@ class Seeder{
 		}
 	}
 
-	public function down(){
+	/**
+	 * @return void
+	 */
+	public function down():void{
 
 		$db = db();
 		foreach($this->files as $file)

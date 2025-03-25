@@ -4,8 +4,13 @@ namespace Strukt\Db\Type\Pop;
 
 use Pop\Db\Db;
 use Pop\Db\Record;
+use Pop\Db\Adapter\Sqlite as PopDbSqliteAdapter;
+use Pop\Db\Adapter\AbstractAdapter as PopDbAbstractAdapter;
 use Strukt\Fs;
 
+/**
+* @author Moderator <pitsolu@gmail.com>
+*/
 class Connection{
 
 	private $adapter = null;
@@ -46,12 +51,18 @@ class Connection{
 		Record::setDb($this->adapter);
 	}
 
-	public function getAdapter(){
+	/**
+	 * @return Pop\Db\Adapter\Sqlite|Pop\Db\Adapter\AbstractAdapter
+	 */
+	public function getAdapter():PopDbSqliteAdapter|PopDbAbstractAdapter{
 
 		return $this->adapter;
 	}
 
-	public function getPdo(){
+	/**
+	 * @return mixed
+	 */
+	public function getPdo():mixed{
 
 		return $this->adapter->getConnection();
 	}

@@ -2,6 +2,9 @@
 
 namespace Strukt\Package;
 
+/**
+* @author Moderator <pitsolu@gmail.com>
+*/
 class PkgDb implements \Strukt\Framework\Contract\Package{
 
 	private $manifest;
@@ -28,7 +31,12 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 		);
 	}
 
-	public function getSettings($type){
+	/**
+	 * @param string $type
+	 * 
+	 * @return array
+	 */
+	public function getSettings(string $type):array{
 
 		$settings = array(
 			"App:Cli"=>array(
@@ -58,36 +66,53 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 		return $settings[$type];
 	}
 
-	public function getName(){
+	/**
+	 * @return string
+	 */
+	public function getName():string{
 
 		return $this->manifest["package"];
 	}
 
-	public function getCmdName(){
+	/**
+	 * @return string
+	 */
+	public function getCmdName():string{
 
 		return $this->manifest["cmd_name"];
 	}
 
-	public function getFiles(){
+	/**
+	 * @return array|null
+	 */
+	public function getFiles():array|null{
 
 		return $this->manifest["files"];
 	}
 
-	public function getModules(){
+	/**
+	 * @return array|null
+	 */
+	public function getModules():array|null{
 
 		return null;
 	}
 
 	/**
 	* Use php's class_exists function to identify a class that indicated your package is installed
+	* 
+	* @return bool
 	*/
-	public function isPublished(){
+	public function isPublished():bool{
 
 		//This will return false because SomeClass::class shouldn't exists
 		return class_exists(\App\Command\Db\DbMakeFromModels::class);
 	}
 
-	public function getRequirements(){
+	/**
+	 * @return array|null
+	 */
+	public function getRequirements():array|null{
 		
 		return null;
 	}

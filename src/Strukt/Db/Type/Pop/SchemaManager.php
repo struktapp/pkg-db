@@ -4,6 +4,11 @@ namespace Strukt\Db\Type\Pop;
 
 use RedBeanPHP\R;
 
+/**
+ * PopDb Schema Manager
+ * 
+ * @author Moderator <pitsolu@gmail.com>
+ */
 class SchemaManager{
 
 	private $db;
@@ -14,6 +19,9 @@ class SchemaManager{
 	private $schema;
 	private $whichDb;
 
+	/**
+	 * @param string $table
+	 */
 	public function __construct(string $table = null){
 
 		if(reg()->exists("db.which"))
@@ -39,17 +47,30 @@ class SchemaManager{
 		$this->table = $table;
 	}
 
-	public function isDb(string $db){
+	/**
+	 * @param string $db
+	 * 
+	 * @return bool
+	 */
+	public function isDb(string $db):bool{
 
 		return $this->whichDb == trim($db);
 	}
 
-	public function getTable(){
+	/**
+	 * @return string
+	 */
+	public function getTable():string{
 
 		return $this->table;
 	}
 
-	public function tableExists(string $table){
+	/**
+	 * @param string $table
+	 * 
+	 * @return bool
+	 */
+	public function tableExists(string $table):bool{
 
 		if($this->isDb("pop"))
 			return $this->db->hasTable($table);
@@ -57,13 +78,25 @@ class SchemaManager{
 		return false;
 	}
 
-	public function createTable(string $table){
+	/**
+	 * @param string $table
+	 * 
+	 * @return static
+	 */
+	public function createTable(string $table):static{
 
 		$this->builder = $this->schema->create($table)->int("id", 16)->increment()->primary("id");
 
 		return $this;
 	}
 
+	/**
+	 * @param string $column
+	 * @param string $type
+	 * @param array $options
+	 * 
+	 * @return static
+	 */
 	public function addColumn(string $column, string $type = "varchar", array $options = []){
 
 		$size = $options["size"]??null;
@@ -80,6 +113,13 @@ class SchemaManager{
 		return $this;
 	}
 
+	/**
+	 * @param string $column
+	 * @param string $type
+	 * @param array $options
+	 * 
+	 * @return static
+	 */
 	public function changeColumn(string $column, string $type = "varchar", array $options = []){
 
 		$size = $options["size"]??null;
@@ -96,7 +136,12 @@ class SchemaManager{
 		return $this;
 	}
 
-	public function hasColumn(string $column){
+	/**
+	 * @param string $column
+	 * 
+	 * @return bool
+	 */
+	public function hasColumn(string $column):bool{
 
 		if(!empty($this->columns))
 			return array_key_exists($column, $this->columns);
@@ -104,7 +149,10 @@ class SchemaManager{
 		return false;
 	}
 
-	public function tables(){
+	/**
+	 * @return array
+	 */
+	public function tables():array{
 
 		if($this->isDb("pop"))
 			return $this->db->getTables();
@@ -112,22 +160,34 @@ class SchemaManager{
 		return [];
 	}
 
+	/**
+	 * @return array
+	 */ 
 	public function fields(){
 
 		return arr($this->columns)->each(fn($k, $v)=>preg_replace("/\(.*\)|\(|\)|\d+/", "", $v))->yield();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function columns(){
 
 		return $this->columns;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getSql(){
 
 		return (string)$this->builder;
 	}
 
-	public function exec(){
+	/**
+	 * @return int
+	 */
+	public function exec():int{
 
 		if(!is_null($this->builder))
 			if($this->isDb("pop"))

@@ -5,8 +5,14 @@ namespace Strukt\Db\Type\Red\Traits;
 use RedBeanPHP\R;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
+ /** 
+ * @author Moderator <pitsolu@gmail.com>
+ */
 trait Rb{
 
+    /**
+     * @var ...$args
+     */
     public function __construct(...$args){
 
         if(!empty($args)){
@@ -17,7 +23,10 @@ trait Rb{
         }
     }
 
-    private function getProperties(){
+    /**
+     * @return array
+     */
+    private function getProperties():array{
 
         $props = get_object_vars($this);
         unset($props["bean"]);
@@ -25,6 +34,9 @@ trait Rb{
         return $props;
     }
 
+    /**
+     * @return int
+     */
     public function save():int{
 
         foreach(get_object_vars($this) as $property=>$value)
@@ -34,12 +46,18 @@ trait Rb{
         return R::store($this->bean);
     }
 
-    public function toArray(){
+    /**
+     * @return array
+     */
+    public function toArray():array{
 
         return $this->unbox()?->export()??$this->getProperties();
     }
 
-    public function __get($name) {
+    /**
+     * @param string $name
+     */
+    public function __get(string $name):array{
 
         $prop = str($name);
         if($prop->equals("id"))

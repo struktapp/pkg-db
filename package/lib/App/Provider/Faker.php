@@ -23,7 +23,10 @@ class Faker implements ProviderInterface{
 		$this->faker->addProvider(new \Faker\Provider\Internet($this->faker));
 	}
 
-	public function register(){
+	/**
+	 * @return void
+	 */
+	public function register():void{
 
 		$self = $this;
 		event("provider.fake", function() use($self){

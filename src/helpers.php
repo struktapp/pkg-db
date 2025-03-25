@@ -15,8 +15,10 @@ if(helper_add("rb")){
 
 	/**
 	* Sync bean and model
+	* 
+	* @param array|\RedBeanPHP\OODBBean $bean
 	*/
-	function sync(array|Bean $bean){
+	function sync(array|Bean $bean):array|Bean{
 
 		if(is_array($bean))
 			return arr($bean)->each(fn($k, $v)=>sync($v))->yield();
@@ -30,7 +32,13 @@ if(helper_add("rb")){
         return $model;
 	};
 
-	function rb(string $model_name = null, int $id = null){
+	/**
+	 * @param string $model_name
+	 * @param int $id
+	 * 
+	 * @return \RedBeanPHP\R
+	 */
+	function rb(string $model_name = null, int $id = null):R{
 
 		if(!is_null($model_name) && is_null($id)) 
 			return R::getRedBean()->dispense(str($model_name)->toLower()->yield())->box();
@@ -44,6 +52,9 @@ if(helper_add("rb")){
 
 if(helper_add("schema")){
 
+	/**
+	 * @return Pop\Db\Sql\Schema
+	 */
 	function schema(){
 
 		try{
@@ -63,7 +74,12 @@ if(helper_add("schema")){
 
 if(helper_add("popdb")){
 
-	function makeModel(string $model){
+	/**
+	 * @param string $model
+	 * 
+	 * @return \Pop\Db\Record
+	 */
+	function makeModel(string $model):\Pop\Db\Record{
 
 		$class = ucfirst(str($model)->toCamel()->yield());
 
@@ -73,7 +89,13 @@ if(helper_add("popdb")){
 		return new $class;
 	}
 
-	function popdb(string $model_name = null, int $id = null){
+	/**
+	 * @param string $model_name
+	 * @param int $id
+	 * 
+	 * @return \Pop\Db\Record
+	 */
+	function popdb(string $model_name = null, int $id = null):\Pop\Db\Record{
 
 		if(!is_null($model_name)){
 
@@ -96,7 +118,12 @@ if(helper_add("popdb")){
 
 if(helper_add("useDb")){
 
-	function useDb(string $db = "rb"){
+	/**
+	 * @param string $db
+	 * 
+	 * @return bool
+	 */
+	function useDb(string $db = "rb"):bool{
 
 		$db = trim($db);
 		reg("db.which", $db);
@@ -115,7 +142,10 @@ if(helper_add("useDb")){
 
 if(helper_add("switchDb")){
 
-	function switchDb(){
+	/**
+	 * @return string|null
+	 */
+	function switchDb():string|null{
 
 		if(reg()->exists("db.which")){
 
@@ -139,7 +169,13 @@ if(helper_add("switchDb")){
 
 if(helper_add("db")){
 
-	function db(string $model_name = null, int $id = null){
+	/**
+	 * @param string $model_name
+	 * @param string $id
+	 * 
+	 * @return \RedBeanPHP\R|\Pop\Db\Record
+	 */
+	function db(string $model_name = null, int $id = null):R|\Pop\Db\Record{
 
 		if(!is_null($model_name) && is_null($id))
 			if(str($model_name)->endsWith("*"))
@@ -178,9 +214,16 @@ if(helper_add("db")){
 
 if(helper_add("sm")){
 
-	function sm(string $table = null){
+	/**
+	 * PopDb Schema Manager
+	 * 
+	 * @param string $table
+	 * 
+	 * @return Strukt\Db\Type\Pop\SchemaManager
+	 */
+	function sm(string $table = null):SchemaManager{
 
-		return new SchemaManager($table);//PopDb Schema Manager
+		return new SchemaManager($table);
 	}
 }
 
@@ -188,7 +231,10 @@ if(helper_add("pdo")){
 
 	counter(0, ".strukt-trx");
 
-	function pdo(){
+	/**
+	 * @return object
+	 */
+	function pdo():object{
 
 		$db = str(reg("db.which"));
 
@@ -210,28 +256,47 @@ if(helper_add("pdo")){
 
 			private $pdo;
 
-			public function __construct($pdo, $is_sqlite){
+			/**
+			 * @param \Pdo $pdo
+			 * @param bool $is_sqlite
+			 */
+			public function __construct(\Pdo $pdo, bool $is_sqlite){
 
 				$this->pdo = $pdo;
 				$this->is_sqlite = $is_sqlite;
 			}
 
+			/**
+			 * @return bool
+			 */
 			public function begin(){
 				
 				return db()->beginTransaction(); //success
 			}
 
+			/**
+			 * @return bool
+			 */
 			public function commit(){
 
 				return db()->commit();
 			}
 
-			public function rollback(){
+			/**
+			 * @return void
+			 */
+			public function rollback():void{
 	
 				db()->rollback();
 			}
 
-			public function execPreQuery(string $sql, array $params){
+			/**
+			 * @param string $sql
+			 * @param array $params
+			 * 
+			 * @return array
+			 */
+			public function execPreQuery(string $sql, array $params):array{
 				
 				$options = [];
 				if(arr($params)->isMap())
@@ -243,7 +308,13 @@ if(helper_add("pdo")){
 				return $stmt->fetchAll(PDO::FETCH_ASSOC);
 			}
 
-			public function execQuery(string $sql, array $params = null){
+			/**
+			 * @param string $sql
+			 * @param array $params
+			 * 
+			 * @return array|null
+			 */
+			public function execQuery(string $sql, array $params = null):array|null{
 
 				if(is_null($params)){
 
@@ -264,29 +335,47 @@ if(helper_add("pdo")){
 				return $this->execPreQuery($sql, $params);
 			}
 
-			public function qMarks(array $params){
+			/**
+			 * @param array $params
+			 * 
+			 * @return string
+			 */
+			public function qMarks(array $params):string{
 
 				$qMarks = str_repeat('?,', count($params) - 1) . '?';
 
 				return $qMarks;
 			}
 
-			public function execPrep(string $sql, array $params = null){
+			/**
+			 * @param string $sql
+			 * @param array $params
+			 * 
+			 * @return array|null
+			 */
+			public function execPrep(string $sql, array $params = null):array|null{
 
 				$params =  array_values(arr($params)->level());
 
 				return $this->execPreQuery($sql, $params);
 			}
 
-			public function getDb(){
+			/**
+			 * @return \Pdo
+			 */
+			public function getDb():\Pdo{
 
 				return $this->pdo;
 			}
 
 			/**
 			* Copied from R::transaction for similar features
+			* 
+			* @param callable $callback
+			* 
+			* @return array|null
 			*/
-			public function transact(callable $callback){
+			public function transact(callable $callback):array|null{
 
 				$result = null;
 				
@@ -311,7 +400,13 @@ if(helper_add("pdo")){
 
 if(helper_add("seed")){
 
-	function seed(string $table, array $data = []){
+	/**
+	 * @param string $table
+	 * @param array $data
+	 * 
+	 * @return array
+	 */
+	function seed(string $table, array $data = []):array{
 
 		$sql = db()->createSql();
 
@@ -323,7 +418,10 @@ if(helper_add("seed")){
 
 if(helper_add("faker")){
 
-	function fake(string $var = null){
+	/**
+	 * @param string $var
+	 */
+	function fake(string $var = null):\Faker\Generator{
 
 		$fake = event("provider.fake")->exec();
 
@@ -336,7 +434,10 @@ if(helper_add("faker")){
 
 if(helper_add("select")){
 
-	function select(string $fields){
+	/**
+	 * @param string $fields
+	 */
+	function select(string $fields):object{
 
 
 		$ops=fn(string $fields)=>arr(str($fields)->split(","))->each(function($k, $field){
@@ -374,21 +475,31 @@ if(helper_add("select")){
 
 		$sql = str(" SELECT ")->concat(implode(", ", $ops($fields)->yield()));
 
+		/**
+		 * @param string $sql
+		 * @param callable $ops
+		 */
 		return new class($sql, $ops){
 
 			private $sql;
 			private $ops;
-
 			public $prep;
 
-			public function __construct($sql, callable $ops){
+			/**
+			 * @param string $sql
+			 * @param callable $ops
+			 */
+			public function __construct(string $sql, callable $ops){
 
 				$this->sql = $sql;
 				$this->ops = $ops;
 				$this->prep = false;
 			}
 
-			public function addSelect(string $fields){
+			/**
+			 * @param string $fields
+			 */
+			public function addSelect(string $fields):static{
 
 				$ops = $this->ops;
 				$this->sql = $this->sql->concat(" , ")->concat(implode(", ", $ops($fields)->yield()));
@@ -396,29 +507,52 @@ if(helper_add("select")){
 				return $this;
 			}
 
-			public function from(string $tables){
+			/**
+			 * @param string $tables
+			 * 
+			 * @return object
+			 */
+			public function from(string $tables):object{
 
-				$self = $this;
+				// $self = $this;
 				$this->sql = $this->sql->concat(str(" FROM ")->concat($tables));
-				return new class($self, $this->sql){
 
-					public function __construct($self, &$sql){
+				// return new class($self, $this->sql){
+				return new class($this, $this->sql){
+
+					/**
+					 * @param object $self
+					 * @param string $sql
+					 */
+					public function __construct(object $self, string &$sql){
 
 						$this->sql = &$sql;
 						$this->self = $self;
 					}
 
-					public function leftjoin(string $join){
+					/**
+					 * @param string $join
+					 * 
+					 * @return static 
+					 */
+					public function leftjoin(string $join):static{
 
 						$this->sql = $this->sql->concat(" LEFT JOIN ")->concat($join);
 
 						return $this;
 					}
 
-					public function __call(string $name, array $args){
+					/**
+					 * @param string $name
+					 * @param array $args
+					 * 
+					 * @return object
+					 */
+					public function __call(string $name, array $args):object{
 
-						if(arr(["orWhere", "andWhere", "where"])->has($name) && !$this->sql->contains(" WHERE "))
-							return $this->self->where(...$args);
+						if(arr(["orWhere", "andWhere", "where"])->has($name) && 
+							!$this->sql->contains(" WHERE "))
+								return $this->self->where(...$args);
 
 						return $this->self->$name(...$args);
 					}
@@ -430,22 +564,37 @@ if(helper_add("select")){
 				};
 			}
 
-			public function where(string $condition){
+			/**
+			 * @param string $condition
+			 * 
+			 * @return object
+			 */
+			public function where(string $condition):object{
 
-				$self = $this;
+				// $self = $this;
 				$this->sql = $this->sql->concat(" WHERE ")->concat($condition);
 				if(str($condition)->contains("?"))
 					$this->prep = true;
 
-				return new class($self, $this->sql){
+				// return new class($self, $this->sql){
+				return new class($this, $this->sql){
 
-					public function __construct($self, &$sql){
+					/**
+					 * @param object $self
+					 * @param string $sql
+					 */
+					public function __construct(object $self, string &$sql){
 
 						$this->sql = &$sql;
 						$this->self = $self;
 					}
 
-					public function andWhere(string $condition){
+					/**
+					 * @param string $condition
+					 * 
+					 * @return static
+					 */
+					public function andWhere(string $condition):static{
 
 						$this->sql = $this->sql->concat(" AND ")->concat($condition);
 						if(str($condition)->contains("?"))
@@ -454,7 +603,10 @@ if(helper_add("select")){
 						return $this;
 					}
 
-					public function orWhere(string $condition){
+					/**
+					 * @param string $condition
+					 */
+					public function orWhere(string $condition):static{
 
 						$this->sql = $this->sql->concat(" OR ")->concat($condition);
 						if(str($condition)->contains("?"))
@@ -463,6 +615,10 @@ if(helper_add("select")){
 						return $this;
 					}
 
+					/**
+					 * @param string $name
+					 * @param array $args
+					 */
 					public function __call(string $name, array $args){
 
 						return $this->self->$name(...$args);
@@ -475,7 +631,13 @@ if(helper_add("select")){
 				};
 			}
 
-			public function page(int $page, int $perPage=10){
+			/**
+			 * @param int $page
+			 * @param int $perPage
+			 * 
+			 * @return static
+			 */
+			public function page(int $page, int $perPage=10):static{
 
 				$offset = ($page - 1) * $perPage;
 
@@ -484,35 +646,59 @@ if(helper_add("select")){
 				return $this;
 			}
 
-			public function groupBy(string $columns){
+			/**
+			 * @param string $columns
+			 * 
+			 * @return static
+			 */
+			public function groupBy(string $columns):static{
 
 				$this->sql = $this->sql->concat(sprintf(" GROUP BY %s", $columns));
 
 				return $this;
 			}
 
-			public function orderBy(string $columns, string $order = "DESC"){
+			/**
+			 * @param string $columns
+			 * @param string $order
+			 * 
+			 * @return static
+			 */
+			public function orderBy(string $columns, string $order = "DESC"):static{
 
 				$this->sql = $this->sql->concat(sprintf(" ORDER BY %s %s", $columns, $order));
 
 				return $this;
 			}
 
-			public function union(string $sql){
+			/**
+			 * @param string $sql
+			 * 
+			 * @return static
+			 */
+			public function union(string $sql):static{
 
 				$this->sql = $this->sql->concat(" UNION ")->concat($sql);
 
 				return $this;
 			}
 
-			public function unionAll(string $sql){
+			/**
+			 * @param string $sql
+			 * 
+			 * @return static
+			 */
+			public function unionAll(string $sql):static{
 
 				$this->sql = $this->sql->concat(" UNION ALL ")->concat($sql);
 
 				return $this;
 			}
 
-			public function isPrep(){
+			/**
+			 * @return bool
+			 */
+			public function isPrep():bool{
 
 				return $this->prep;
 			}
@@ -527,35 +713,55 @@ if(helper_add("select")){
 
 if(helper_add("modify")){
 
+	/**
+	 * @param string $table
+	 */
 	function modify(string $table){
 
 		return new class($table){
 
 			private $sql;
 
+			/**
+			 * @param string $table
+			 */
 			public function __construct(string $table){
 
 				$this->sql = str("UPDATE ")->concat($table);
 			}
 
-			public function set(string $modify){
+			/**
+			 * @param string $modify
+			 * 
+			 * @return object
+			 */
+			public function set(string $modify):object{
 
 				$separator = preg_match("/\sSET\s/", $this->sql->yield());
 
 				$this->sql = $this->sql->concat($separator?", ":" SET ")->concat($modify);
 
-				return new class($this->sql, $this){
+				return new class($this, $this->sql){
 
 					private $sql;
 					private $parent;
 
-					public function __construct($sql, $parent){
+					/**
+					 * @param object $self
+					 * @param string $sql
+					 */
+					public function __construct(object $self, string $sql){
 
 						$this->parent = $parent;
 						$this->sql = $sql;
 					}
 
-					public function where(string $condition){
+					/**
+					 * @param string $condition
+					 * 
+					 * @return static 
+					 */
+					public function where(string $condition):static{
 
 						$where = " WHERE ";
 						if($this->sql->contains("WHERE"))
@@ -566,11 +772,21 @@ if(helper_add("modify")){
 						return $this;
 					}
 
-					public function andWhere(string $condition){
+					/**
+					 * @param string $condition
+					 * 
+					 * @return static
+					 */
+					public function andWhere(string $condition):static{
 
 						return $this->where($condition);
 					}
 
+					/**
+					 * @param string $condition
+					 * 
+					 * @return static
+					 */
 					public function orWhere(string $condition){
 
 						$where = " WHERE ";
@@ -582,11 +798,18 @@ if(helper_add("modify")){
 						return $this;
 					}
 
-					public function yield(){
+					/**
+					 * @return string
+					 */
+					public function yield():string{
 
 						return $this->sql->yield();
 					}
 
+					/**
+					 * @param string $name
+					 * @param array $args
+					 */
 					public function __call(string $name, array $args){
 
 						return $this->parent->$name(...$args);
@@ -594,11 +817,19 @@ if(helper_add("modify")){
 				};
 			}
 
-			public function addSet(string $modify){
+			/**
+			 * @param string $modify
+			 * 
+			 * @return object
+			 */
+			public function addSet(string $modify):object{
 
 				return $this->set($modify);
 			}
 
+			/**
+			 * @return string
+			 */
 			public function yield(){
 
 				return $this->sql->yield();
@@ -609,12 +840,20 @@ if(helper_add("modify")){
 
 if(helper_add("resultset")){
 
-	function resultset(mixed $sql, array $filter = []){
+	/**
+	 * @param mixed $sql
+	 * @param array $filter
+	 */
+	function resultset(mixed $sql, array $filter = []):object{
 
 		return new class($sql, $filter){
 
 			private $rs;
 
+			/**
+			 * @param mixed $sql
+			 * @param array $filter
+			 */
 			public function __construct(mixed $sql, array $filter){
 
 				if($sql->isPrep())
@@ -624,7 +863,15 @@ if(helper_add("resultset")){
 					$this->rs = pdo()->execQuery((string)$sql, $filter);
 			}
 
-			public function normalize(string $field){
+			/**
+			 * Normalizing database fields
+			 *  - date
+			 * 
+			 * @param string $field
+			 * 
+			 * @return static
+			 */
+			public function normalize(string $field):static{
 
 				list($field, $type) = str($field)->split(":");
 
@@ -642,6 +889,9 @@ if(helper_add("resultset")){
 				return $this;
 			}
 
+			/**
+			 * @return array
+			 */
 			public function yield(){
 
 				return $this->rs;
@@ -652,7 +902,14 @@ if(helper_add("resultset")){
 
 if(helper_add("filter")){
 
-	function filter(array $fields, string $filter, bool $like=true){
+	/**
+	 * @param array $fields
+	 * @param string $filter
+	 * @param bool $like
+	 * 
+	 * @return array
+	 */
+	function filter(array $fields, string $filter, bool $like=true):array{
 
 		$flike = fn($v)=>$v;
 		if($like)
@@ -671,7 +928,14 @@ if(helper_add("filter")){
 
 if(helper_add("last")){
 
-	function last(string $tbl, int $count = 10, int $start_at = 1){
+	/**
+	 * @param string $bl
+	 * @param int $count
+	 * @param int $start_at
+	 * 
+	 * @return array|\RedBeanPHP\OODBBean
+	 */
+	function last(string $tbl, int $count = 10, int $start_at = 1):array|Bean{
 
 		$page = page($start_at, $count);
 
@@ -685,7 +949,13 @@ if(helper_add("last")){
 
 if(helper_add("page")){
 
-	function page(int $page=1, int $perPage=10){
+	/**
+	 * @param int $page
+	 * @param int $perPage
+	 * 
+	 * @return array
+	 */
+	function page(int $page=1, int $perPage=10):array{
 
 		$offset = ($page - 1) * $perPage;
 

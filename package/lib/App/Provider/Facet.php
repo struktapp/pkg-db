@@ -17,7 +17,10 @@ class Facet implements ProviderInterface{
 		//
 	}
 
-	public function register(){
+	/**
+	 * @return void
+	 */
+	public function register():void{
 
 		$self = $this;
 		event("provider.core", function(string $alias_ns, array $args = null) use($self){
