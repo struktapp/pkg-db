@@ -26,7 +26,9 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 		        "lib/App/Provider/Faker.php",
 		        "app/src/App/User.sgf",
 		        "db/data/.keep",
-		        "cfg/db.ini"
+		        "cfg/db.ini",
+		        "xcli.dbx",
+		        "xhttp.dbx"
 			)
 		);
 	}

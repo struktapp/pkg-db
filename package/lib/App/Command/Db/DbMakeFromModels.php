@@ -52,9 +52,16 @@ class DbMakeFromModels extends \Strukt\Console\Command{
 				$sm->exec();
 			}
 
-			$notes = notes(sprintf("%s\\%s", $app_name, $model));
+			$class = sprintf("%s\\%s", $app_name, $model);
+			$notes = notes($class);
 			unset($notes["methods"]);
 			unset($notes["properties"]["bean"]);
+
+			$notes["properties"] = array_filter($notes["properties"], function($key) use($class){
+
+				return in_array($key, array_keys(get_class_vars($class)));
+
+			}, ARRAY_FILTER_USE_KEY);
 
 			arr($notes["properties"])->each(function($column, $note) use($table, $types, $out){
 
@@ -62,6 +69,9 @@ class DbMakeFromModels extends \Strukt\Console\Command{
 
 				$otype = strtolower($note["Type"]["item"]);
 				$type = $types[$otype];
+				if(is_null($note))
+					$note = [];
+
 				if(array_key_exists("List", $note))
 					$type = str($type)
 						->concat("('")
@@ -76,6 +86,13 @@ class DbMakeFromModels extends \Strukt\Console\Command{
 				if(str($otype)->toLower()->equals("int") ||
 					str($otype)->toLower()->equals("integer"))
 					$options["size"] = 11;
+
+				if(is_null($type))
+					$type = "varchar";
+
+				if(arr($note)->contains("Default"))
+					if(str($note["Default"]["item"])->equals("now"))
+						$options["default"] = "CURRENT_TIMESTAMP";
 
 				try{
 

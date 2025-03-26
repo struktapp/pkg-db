@@ -1,0 +1,19 @@
+{
+	"table":"user",
+	"generic":{
+
+		"status":"Active"
+	},
+	"data":[
+		{
+
+			"email":"spiderman",
+			"password":"p@55w0rd"
+		},
+		{
+
+			"email":"venom",
+			"password":"p@55w0rd",
+		}
+	]
+}

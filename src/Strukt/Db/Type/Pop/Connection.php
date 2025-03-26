@@ -8,6 +8,10 @@ use Pop\Db\Adapter\Sqlite as PopDbSqliteAdapter;
 use Pop\Db\Adapter\AbstractAdapter as PopDbAbstractAdapter;
 use Strukt\Fs;
 
+
+// Adapter\Sqlite
+// Adapter\AbstractAdapter
+
 /**
 * @author Moderator <pitsolu@gmail.com>
 */
@@ -52,9 +56,9 @@ class Connection{
 	}
 
 	/**
-	 * @return Pop\Db\Adapter\Sqlite|Pop\Db\Adapter\AbstractAdapter
+	 * @return \Pop\Db\Adapter\AbstractAdapter
 	 */
-	public function getAdapter():PopDbSqliteAdapter|PopDbAbstractAdapter{
+	public function getAdapter():PopDbAbstractAdapter{
 
 		return $this->adapter;
 	}

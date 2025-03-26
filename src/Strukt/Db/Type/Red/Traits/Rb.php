@@ -57,7 +57,7 @@ trait Rb{
     /**
      * @param string $name
      */
-    public function __get(string $name):array{
+    public function __get($name):array{
 
         $prop = str($name);
         if($prop->equals("id"))

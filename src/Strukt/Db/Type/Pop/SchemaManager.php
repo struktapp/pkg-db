@@ -3,6 +3,7 @@
 namespace Strukt\Db\Type\Pop;
 
 use RedBeanPHP\R;
+use Pop\Db\Adapter\AbstractAdapter as PopDbAbstractAdapter;
 
 /**
  * PopDb Schema Manager
@@ -187,7 +188,7 @@ class SchemaManager{
 	/**
 	 * @return int
 	 */
-	public function exec():int{
+	public function exec():int|PopDbAbstractAdapter{
 
 		if(!is_null($this->builder))
 			if($this->isDb("pop"))

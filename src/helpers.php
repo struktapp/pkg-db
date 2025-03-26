@@ -1,13 +1,15 @@
 <?php
 
-use RedBeanPHP\R;
-use Pop\Db\Record;
 use Strukt\Db\Type\Pop\SchemaManager;
 use Strukt\Db\Type\Pop\Connection as PopDb;
 use Strukt\Db\Type\Red\Connection as RedDb;
-use Pop\Db\Sql\Schema as PopSchema;
-use Pop\Db\Adapter\Pdo as PopPdo;
+use Pop\Db\Sql\Schema as PopDbSchema;
+use Pop\Db\Adapter\Pdo as PopDbPdo;
+use Pop\Db\Record as PopDbRecord;
+use Pop\Db\Adapter\AbstractAdapter as PopDbAbstractAdapter;
 use RedBeanPHP\OODBBean as Bean;
+use RedBeanPHP\R;
+use Faker\Generator;
 
 helper("pkg-db");
 
@@ -55,7 +57,7 @@ if(helper_add("schema")){
 	/**
 	 * @return Pop\Db\Sql\Schema
 	 */
-	function schema(){
+	function schema():PopDbSchema{
 
 		try{
 
@@ -67,7 +69,7 @@ if(helper_add("schema")){
 			$db = config("db*");
 			config("db.database", $db["name"]);
 
-			return new PopSchema(new PopPdo(config("db*")));
+			return new PopDbSchema(new PopDbPdo(config("db*")));
 		}
 	}
 }
@@ -79,7 +81,7 @@ if(helper_add("popdb")){
 	 * 
 	 * @return \Pop\Db\Record
 	 */
-	function makeModel(string $model):\Pop\Db\Record{
+	function makeModel(string $model):PopDbRecord{
 
 		$class = ucfirst(str($model)->toCamel()->yield());
 
@@ -93,9 +95,9 @@ if(helper_add("popdb")){
 	 * @param string $model_name
 	 * @param int $id
 	 * 
-	 * @return \Pop\Db\Record
+	 * @return \Pop\Db\Record|\Pop\Db\Adapter\AbstractAdapter
 	 */
-	function popdb(string $model_name = null, int $id = null):\Pop\Db\Record{
+	function popdb(string $model_name = null, int $id = null):PopDbRecord|PopDbAbstractAdapter{
 
 		if(!is_null($model_name)){
 
@@ -112,7 +114,7 @@ if(helper_add("popdb")){
 			return new $model([]);
 		}
 
-		return Record::getDb();
+		return PopDbRecord::getDb();
 	}
 }
 
@@ -173,9 +175,9 @@ if(helper_add("db")){
 	 * @param string $model_name
 	 * @param string $id
 	 * 
-	 * @return \RedBeanPHP\R|\Pop\Db\Record
+	 * @return \RedBeanPHP\R|\Pop\Db\Record|\Pop\Db\Adapter\AbstractAdapter
 	 */
-	function db(string $model_name = null, int $id = null):R|\Pop\Db\Record{
+	function db(string $model_name = null, int $id = null):R|PopDbRecord|PopDbAbstractAdapter{
 
 		if(!is_null($model_name) && is_null($id))
 			if(str($model_name)->endsWith("*"))
@@ -420,8 +422,10 @@ if(helper_add("faker")){
 
 	/**
 	 * @param string $var
+	 * 
+	 * @return \Faker\Generator
 	 */
-	function fake(string $var = null):\Faker\Generator{
+	function fake(string $var = null):FakerGenerator{
 
 		$fake = event("provider.fake")->exec();
 

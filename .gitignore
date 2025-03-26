@@ -1,1 +1,15 @@
 vendor/
+.env
+.tpl/
+.cache/
+bootstrap.php
+cfg/
+index.php
+lib/
+xcli
+app/
+./db/
+payroll.sqlite
+php_errors.log
+xcli.dbx
+xhttp.dbx
