@@ -13,3 +13,4 @@ payroll.sqlite
 php_errors.log
 xcli.dbx
 xhttp.dbx
+sql/

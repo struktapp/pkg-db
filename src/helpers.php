@@ -10,10 +10,11 @@ use Pop\Db\Adapter\AbstractAdapter as PopDbAbstractAdapter;
 use RedBeanPHP\OODBBean as Bean;
 use RedBeanPHP\R;
 use Faker\Generator;
+use Strukt\Type\Str;
 
 helper("pkg-db");
 
-if(helper_add("rb")){
+if(helper_add("sync")){
 
 	/**
 	* Sync bean and model
@@ -33,7 +34,9 @@ if(helper_add("rb")){
 
         return $model;
 	};
+}
 
+if(helper_add("rb")){
 	/**
 	 * @param string $model_name
 	 * @param int $id
@@ -74,7 +77,8 @@ if(helper_add("schema")){
 	}
 }
 
-if(helper_add("popdb")){
+
+if(helper_add("makeModel")){
 
 	/**
 	 * @param string $model
@@ -90,6 +94,9 @@ if(helper_add("popdb")){
 
 		return new $class;
 	}
+}
+
+if(helper_add("popdb")){
 
 	/**
 	 * @param string $model_name
@@ -418,7 +425,7 @@ if(helper_add("seed")){
 	}
 }
 
-if(helper_add("faker")){
+if(helper_add("fake")){
 
 	/**
 	 * @param string $var
@@ -493,7 +500,7 @@ if(helper_add("select")){
 			 * @param string $sql
 			 * @param callable $ops
 			 */
-			public function __construct(string $sql, callable $ops){
+			public function __construct(Str $sql, callable $ops){
 
 				$this->sql = $sql;
 				$this->ops = $ops;
@@ -524,11 +531,14 @@ if(helper_add("select")){
 				// return new class($self, $this->sql){
 				return new class($this, $this->sql){
 
+					private $sql;
+					private $self;
+
 					/**
 					 * @param object $self
 					 * @param string $sql
 					 */
-					public function __construct(object $self, string &$sql){
+					public function __construct(object $self, Str &$sql){
 
 						$this->sql = &$sql;
 						$this->self = $self;
@@ -554,8 +564,10 @@ if(helper_add("select")){
 					 */
 					public function __call(string $name, array $args):object{
 
-						if(arr(["orWhere", "andWhere", "where"])->has($name) && 
-							!$this->sql->contains(" WHERE "))
+						if(arr([
+							"orWhere", 
+							"andWhere", 
+							"where"])->has($name) && !$this->sql->contains(" WHERE "))
 								return $this->self->where(...$args);
 
 						return $this->self->$name(...$args);
@@ -583,11 +595,14 @@ if(helper_add("select")){
 				// return new class($self, $this->sql){
 				return new class($this, $this->sql){
 
+					private $self;
+					private $sql;
+
 					/**
 					 * @param object $self
 					 * @param string $sql
 					 */
-					public function __construct(object $self, string &$sql){
+					public function __construct(object $self, Str &$sql){
 
 						$this->sql = &$sql;
 						$this->self = $self;
@@ -633,6 +648,13 @@ if(helper_add("select")){
 						return $this->sql->yield();
 					}
 				};
+			}
+
+			public function limit(int $limit):static{
+
+				$this->sql = $this->sql->concat(sprintf(" LIMIT %d", $limit));
+
+				return $this;
 			}
 
 			/**
@@ -754,7 +776,7 @@ if(helper_add("modify")){
 					 * @param object $self
 					 * @param string $sql
 					 */
-					public function __construct(object $self, string $sql){
+					public function __construct(object $parent, Str $sql){
 
 						$this->parent = $parent;
 						$this->sql = $sql;
