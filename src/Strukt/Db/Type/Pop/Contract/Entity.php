@@ -10,7 +10,7 @@ abstract class Entity extends \Pop\Db\Record{
 	/**
 	 * @param array $row
 	 */
-	public function __construct(array $row = null){
+	public function __construct(?array $row = null){
 
 		$child = get_called_class();
 		foreach(get_class_vars($child) as $property=>$value)

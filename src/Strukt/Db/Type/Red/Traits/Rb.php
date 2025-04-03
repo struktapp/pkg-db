@@ -3,7 +3,6 @@
 namespace Strukt\Db\Type\Red\Traits;
 
 use RedBeanPHP\R;
-use Symfony\Component\String\Inflector\EnglishInflector;
 
  /** 
  * @author Moderator <pitsolu@gmail.com>
@@ -67,9 +66,7 @@ trait Rb{
         if(property_exists($this, $prop))
             return sync($this->bean->$name);
 
-        $inflector = new EnglishInflector();
-        $names = $inflector->singularize($name);
-        $prop = reset($names);
+        $prop = singular($name);
 
         $owner = str(get_called_class())
                     ->replace(str(config("app.name"))
