@@ -33,6 +33,15 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 		);
 	}
 
+
+	/**
+	 * @return void
+	 */
+	public function preInstall():void{
+		
+		//
+	}
+
 	/**
 	 * @param string $type
 	 * 
@@ -117,5 +126,14 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 	public function getRequirements():array|null{
 		
 		return null;
+	}
+
+	/**
+	 * @return void
+	 */
+	public function postInstall():void{
+		
+		exec("chmod +x xcli.dbx");
+		exec("chmod +x xhttp.dbx");
 	}
 }

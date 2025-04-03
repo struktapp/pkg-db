@@ -325,12 +325,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "924d85380f26d1563e32ec4c5836d561fa0aceed"
+                "reference": "2e97231b969e0ffdeff03329b808945b4ba55e38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/924d85380f26d1563e32ec4c5836d561fa0aceed",
-                "reference": "924d85380f26d1563e32ec4c5836d561fa0aceed",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/2e97231b969e0ffdeff03329b808945b4ba55e38",
+                "reference": "2e97231b969e0ffdeff03329b808945b4ba55e38",
                 "shasum": ""
             },
             "require": {
@@ -421,7 +421,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-24T23:29:50+00:00"
+            "time": "2025-04-03T11:44:45+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1940,12 +1940,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/struktapp/strukt-framework.git",
-                "reference": "bf33d89c746ac05d9b0da47a66de6a2533e0134d"
+                "reference": "445bcc7d76bd7cf63de3081d5354aa825454fdf1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/struktapp/strukt-framework/zipball/bf33d89c746ac05d9b0da47a66de6a2533e0134d",
-                "reference": "bf33d89c746ac05d9b0da47a66de6a2533e0134d",
+                "url": "https://api.github.com/repos/struktapp/strukt-framework/zipball/445bcc7d76bd7cf63de3081d5354aa825454fdf1",
+                "reference": "445bcc7d76bd7cf63de3081d5354aa825454fdf1",
                 "shasum": ""
             },
             "require": {
@@ -1990,7 +1990,7 @@
                 "issues": "https://github.com/struktapp/strukt-framework/issues",
                 "source": "https://github.com/struktapp/strukt-framework/tree/v1.1.8-alpha"
             },
-            "time": "2025-04-03T05:53:24+00:00"
+            "time": "2025-04-03T14:00:05+00:00"
         },
         {
             "name": "strukt/fs",
