@@ -132,8 +132,8 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 	 * @return void
 	 */
 	public function postInstall():void{
-		
-		exec("chmod +x xcli.dbx");
-		exec("chmod +x xhttp.dbx");
+
+		chmod('./xcli.dbx', 0755);
+		chmod('./xhttp.dbx', 0755);
 	}
 }
