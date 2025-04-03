@@ -11,11 +11,13 @@
     ],
     "minimum-stability":"dev",
     "require": {
-        "strukt/framework": "v1.1.8-alpha",
         "popphp/pop-db": "^6.6",
         "gabordemooij/redbean": "dev-master",
         "monolog/monolog":"*",
         "fakerphp/faker":"*"
+    },
+    "require-dev":{
+        "strukt/framework": "v1.1.8-alpha"
     },
     "autoload": {
         
