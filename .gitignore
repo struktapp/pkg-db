@@ -11,6 +11,6 @@ app/
 ./db/
 payroll.sqlite
 php_errors.log
-xcli.dbx
-xhttp.dbx
+/xcli.dbx
+/xhttp.dbx
 sql/
