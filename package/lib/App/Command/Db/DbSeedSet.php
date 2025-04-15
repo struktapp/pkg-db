@@ -7,7 +7,7 @@ use Strukt\Console\Output;
 use Strukt\Db\Type\Pop\Seeder;
 
 /**
-* db:seeds   Seed database tables iwth JSON set (folder)
+* db:seeds   Seed database tables with JSON set (folder)
 *
 * Usage:
 *

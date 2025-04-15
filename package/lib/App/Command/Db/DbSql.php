@@ -6,7 +6,7 @@ use Strukt\Console\Input;
 use Strukt\Console\Output;
 
 /**
-* db:sql    Truncate database
+* db:sql    Run SQL
 *
 * Usage:
 *
