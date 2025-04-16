@@ -122,7 +122,7 @@ class DbMakeFromModels extends \Strukt\Console\Command{
 						print_r($sm->getSql());
 						$sm->exec();
 
-						msg(sprintf("status:success|table:%s|column:%s|type:%s", 
+						heap(sprintf("status:success|table:%s|column:%s|type:%s", 
 										$table, 
 										$column, 
 										$type));
@@ -130,7 +130,7 @@ class DbMakeFromModels extends \Strukt\Console\Command{
 				}
 				catch(\Exception $e){
 
-					msg(color("light-red", sprintf("status:fail|table:%s|column:%s|type:%s - %s", 
+					heap(color("light-red", sprintf("status:fail|table:%s|column:%s|type:%s - %s", 
 									$table, 
 									$column,
 									$type, 
@@ -139,7 +139,7 @@ class DbMakeFromModels extends \Strukt\Console\Command{
 			});
 		});
 
-		$messages = msg()->get();
+		$messages = heap()->get();
 		if(!$messages->empty())
 			$out->add(implode("\n", $messages->yield()));
 

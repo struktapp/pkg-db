@@ -103,18 +103,18 @@ class DbMakeModels extends \Strukt\Console\Command{
 				
 				$success = fs($app_path)->touchWrite($filename, $contents);
 				if(!$success)
-					msg(color("light-red", sprintf("status:fail|model:%s - Was unable to create model %s!", 
+					heap(color("light-red", sprintf("status:fail|model:%s - Was unable to create model %s!", 
 						$short_name,
 						$short_name)));
 				else
-					msg(sprintf("status:success|model:%s", $short_name));
+					heap(sprintf("status:success|model:%s", $short_name));
 			}
 			catch(\Exception $e){
 
-				msg(color("light-red", sprintf("status:fail|model:%s", $short_name, $e->getMessage())));
+				heap(color("light-red", sprintf("status:fail|model:%s", $short_name, $e->getMessage())));
 			}
 		});
 
-		$out->add(implode("\n", msg()->get()->yield()));
+		$out->add(implode("\n", heap()->get()->yield()));
 	}
 }
