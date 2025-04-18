@@ -25,6 +25,9 @@ class DbSeedSet extends \Strukt\Console\Command{
 	*/
 	public function execute(Input $in, Output $out){
 
+		if(negate(class_exists(\Strukt\Hash\Bcrypt::class)))
+			raise("package[strukt/key] is required by bcry!");
+
 		$direction = $in->get("direction");
 		if(empty($direction))
 			$direction = "up";
