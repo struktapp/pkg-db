@@ -415,7 +415,7 @@ if(helper_add("seed")){
 	 * 
 	 * @return array
 	 */
-	function seed(string $table, array $data = []):array{
+	function seed(string $table, array $data = []):PopDbAbstractAdapter{
 
 		$sql = db()->createSql();
 
