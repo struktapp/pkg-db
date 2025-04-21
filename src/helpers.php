@@ -264,6 +264,7 @@ if(helper_add("pdo")){
 		return new class($pdo, $is_sqlite){
 
 			private $pdo;
+			private $is_sqlite;
 
 			/**
 			 * @param \Pdo $pdo
