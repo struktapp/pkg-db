@@ -261,19 +261,16 @@ if(helper_add("pdo")){
 		if(negate($is_sqlite))
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		return new class($pdo, $is_sqlite){
+		return new class($pdo){
 
 			private $pdo;
-			private $is_sqlite;
 
 			/**
 			 * @param \Pdo $pdo
-			 * @param bool $is_sqlite
 			 */
-			public function __construct(\Pdo $pdo, bool $is_sqlite){
+			public function __construct(\Pdo $pdo){
 
 				$this->pdo = $pdo;
-				$this->is_sqlite = $is_sqlite;
 			}
 
 			/**
@@ -326,21 +323,9 @@ if(helper_add("pdo")){
 			 */
 			public function execQuery(string $sql, array $params = null):array|null{
 
-				if(is_null($params)){
-
-					if(negate($this->is_sqlite))
-						return $this->pdo->query($sql, \PDO::FETCH_ASSOC)->fetchAll();
-
-					if($this->is_sqlite){
-
-						$rs = [];
-						$res = $this->pdo->query($sql);//Sqlite3Result
-						while($row = $res->fetchArray(SQLITE3_ASSOC))
-							$rs[] = $row;
-
-						return $rs;
-					}
-				}
+				if(is_null($params))
+					return $this->pdo->query($sql, \PDO::FETCH_ASSOC)->fetchAll();
+				
 
 				return $this->execPreQuery($sql, $params);
 			}
