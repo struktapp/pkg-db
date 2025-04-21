@@ -46,8 +46,9 @@ class Connection{
 
 			$path = str(sprintf("sqlite:%s/%s", $path, $file))->replace("phar://","")->yield();
 
-			$this->adapter = Db::sqliteConnect([
+			$this->adapter = Db::connect('pdo',[
 
+				"type"=>"sqlite",
 				"database"=>$file
 			]);
 		}
