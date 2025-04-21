@@ -2,8 +2,10 @@
 	"table":"role",
 	"data":[
 		{
-
 			"name":"admin"
+		},
+		{
+			"name":"user"
 		}
 	]
 }

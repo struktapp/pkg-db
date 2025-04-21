@@ -17,6 +17,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 			"files"=>array(
 				"bin/seed",
 				"bin/seed-acl",
+				"bin/sqlite",
 				"xhttp.dbx",
 				"cfg/db.ini",
 				"xcli.dbx",
@@ -141,5 +142,8 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 
 		chmod('./xcli.dbx', 0755);
 		chmod('./xhttp.dbx', 0755);
+		chmod('./bin/seed', 0755);
+		chmod('./bin/seed-acl', 0755);
+		chmod('./bin/sqlite', 0755);
 	}
 }

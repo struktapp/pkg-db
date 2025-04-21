@@ -1,10 +1,15 @@
 {
 	"table":"user",
+	"relations":{
+
+		"role":"name"
+	},
 	"data":[
 		{
 
 			"username":"pitsolu",
 			"password":"p@55w0rd",
+			"role_id":"admin",
 			"status":"Active"
 		}
 	]
