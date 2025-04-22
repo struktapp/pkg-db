@@ -49,8 +49,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 	 */
 	public function preInstall():void{
 
-		Filesystem::mkdir(".bak");
-		Filesystem::cpr("index.php", ".bak/index.php");
+		//
 	}
 
 	/**
