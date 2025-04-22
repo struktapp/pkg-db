@@ -4,13 +4,13 @@ printf "\n"
 printf "Wipe Database\n"
 printf "==============\n"
 
-php xcli db:wipe
+php xcli.dbx db:wipe
 
 printf "\n"
 printf "Seed Database\n"
 printf "=============\n"
-php xcli db:feed db/data/permission.json
-php xcli db:feed db/data/role.json
+php xcli.dbx db:feed db/data/permission.json
+php xcli.dbx db:feed db/data/role.json
 
-php xcli db:seeds admin
+php xcli.dbx db:seeds admin
 

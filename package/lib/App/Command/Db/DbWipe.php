@@ -32,7 +32,13 @@ class DbWipe extends \Strukt\Console\Command{
 
 			arr($tables)->each(function($k, $table){
 
-				db()->query(schema()->truncate($table)->render());
+				$dbfile = config("db.file");
+				if(notnull($dbfile))//SQLite
+					pdo()->execQuery(sprintf("DELETE FROM %s", $table));
+
+				if(is_null($dbfile))//Other DBs
+					db()->query(schema()->truncate($table)->render());
+
 				print_r(sprintf("success:true|table:%s\n", $table));
 			});
 		}
