@@ -21,6 +21,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 				"xhttp.dbx",
 				"cfg/db.ini",
 				"xcli.dbx",
+				"index.php",
 				"app/src/App/User.sgf",
 				"db/data/permission.json",
 				"db/data/user.json",
@@ -46,7 +47,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 	 */
 	public function preInstall():void{
 		
-		//
+		fs()->rename("index.php", sprintf("index-%s.php", today()->format("YmdHis")));
 	}
 
 	/**
@@ -133,6 +134,14 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 	public function getRequirements():array|null{
 		
 		return null;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function remove():bool{
+
+		raise("Unimplemented!");
 	}
 
 	/**

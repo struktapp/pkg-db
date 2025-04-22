@@ -4,7 +4,7 @@ vendor/
 .cache/
 bootstrap.php
 cfg/
-index.php
+/index.php
 lib/
 xcli
 app/
