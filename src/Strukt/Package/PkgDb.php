@@ -2,6 +2,8 @@
 
 namespace Strukt\Package;
 
+use Strukt\Fs as Filesystem;
+
 /**
 * @author Moderator <pitsolu@gmail.com>
 */
@@ -46,8 +48,9 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 	 * @return void
 	 */
 	public function preInstall():void{
-		
-		fs()->rename("index.php", sprintf("index-%s.php", today()->format("YmdHis")));
+
+		Filesystem::mkdir(".bak");
+		Filesystem::cpr("index.php", ".bak/index.php");
 	}
 
 	/**
@@ -148,6 +151,8 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 	 * @return void
 	 */
 	public function postInstall():void{
+
+		Filesystem::rmdir(".cache");
 
 		chmod('./xcli.dbx', 0755);
 		chmod('./xhttp.dbx', 0755);
