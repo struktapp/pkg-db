@@ -12,6 +12,7 @@ use RedBeanPHP\SimpleModelInterface;
 use RedBeanPHP\R;
 use Faker\Generator;
 use Strukt\Type\Str;
+use Strukt\Contract\SqlInterface;
 
 helper("pkg-db");
 
@@ -435,8 +436,7 @@ if(helper_add("select")){
 	/**
 	 * @param string $fields
 	 */
-	function select(string $fields):object{
-
+	function select(string $fields):SqlInterface{
 
 		$ops=fn(string $fields)=>arr(str($fields)->split(","))->each(function($k, $field){
 				
@@ -477,7 +477,7 @@ if(helper_add("select")){
 		 * @param string $sql
 		 * @param callable $ops
 		 */
-		return new class($sql, $ops){
+		return new class($sql, $ops) implements SqlInterface{
 
 			private $sql;
 			private $ops;
@@ -510,13 +510,13 @@ if(helper_add("select")){
 			 * 
 			 * @return object
 			 */
-			public function from(string $tables):object{
+			public function from(string $tables):SqlInterface{
 
 				// $self = $this;
 				$this->sql = $this->sql->concat(str(" FROM ")->concat($tables));
 
 				// return new class($self, $this->sql){
-				return new class($this, $this->sql){
+				return new class($this, $this->sql) implements SqlInterface{
 
 					private $sql;
 					private $self;
@@ -547,9 +547,9 @@ if(helper_add("select")){
 					 * @param string $name
 					 * @param array $args
 					 * 
-					 * @return object
+					 * @return \Strukt\Contract\SqlInterface
 					 */
-					public function __call(string $name, array $args):object{
+					public function __call(string $name, array $args):SqlInterface{
 
 						if(arr([
 							"orWhere", 
@@ -572,7 +572,7 @@ if(helper_add("select")){
 			 * 
 			 * @return object
 			 */
-			public function where(string $condition):object{
+			public function where(string $condition):SqlInterface{
 
 				// $self = $this;
 				$this->sql = $this->sql->concat(" WHERE ")->concat($condition);
@@ -580,7 +580,7 @@ if(helper_add("select")){
 					$this->prep = true;
 
 				// return new class($self, $this->sql){
-				return new class($this, $this->sql){
+				return new class($this, $this->sql) implements SqlInterface{
 
 					private $self;
 					private $sql;
@@ -624,8 +624,10 @@ if(helper_add("select")){
 					/**
 					 * @param string $name
 					 * @param array $args
+					 * 
+					 * @return \Strukt\Contract\SqlInterface
 					 */
-					public function __call(string $name, array $args){
+					public function __call(string $name, array $args):SqlInterface{
 
 						return $this->self->$name(...$args);
 					}
@@ -729,9 +731,9 @@ if(helper_add("modify")){
 	/**
 	 * @param string $table
 	 */
-	function modify(string $table){
+	function modify(string $table):SqlInterface{
 
-		return new class($table){
+		return new class($table) implements SqlInterface{
 
 			private $sql;
 
@@ -748,13 +750,13 @@ if(helper_add("modify")){
 			 * 
 			 * @return object
 			 */
-			public function set(string $modify):object{
+			public function set(string $modify):SqlInterface{
 
 				$separator = preg_match("/\sSET\s/", $this->sql->yield());
 
 				$this->sql = $this->sql->concat($separator?", ":" SET ")->concat($modify);
 
-				return new class($this, $this->sql){
+				return new class($this, $this->sql) implements SqlInterface{
 
 					private $sql;
 					private $parent;
@@ -800,7 +802,7 @@ if(helper_add("modify")){
 					 * 
 					 * @return static
 					 */
-					public function orWhere(string $condition){
+					public function orWhere(string $condition):static{
 
 						$where = " WHERE ";
 						if($this->sql->contains("WHERE"))
@@ -822,10 +824,17 @@ if(helper_add("modify")){
 					/**
 					 * @param string $name
 					 * @param array $args
+					 * 
+					 * @return \Strukt\Contract\SqlInterface
 					 */
-					public function __call(string $name, array $args){
+					public function __call(string $name, array $args):SqlInterface{
 
 						return $this->parent->$name(...$args);
+					}
+
+					public function __toString(){
+
+						return $this->sql->yield();
 					}
 				};
 			}
@@ -835,7 +844,7 @@ if(helper_add("modify")){
 			 * 
 			 * @return object
 			 */
-			public function addSet(string $modify):object{
+			public function addSet(string $modify):SqlInterface|string{
 
 				return $this->set($modify);
 			}
@@ -844,6 +853,11 @@ if(helper_add("modify")){
 			 * @return string
 			 */
 			public function yield(){
+
+				return $this->sql->yield();
+			}
+
+			public function __toString(){
 
 				return $this->sql->yield();
 			}
