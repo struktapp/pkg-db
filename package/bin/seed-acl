@@ -3,21 +3,21 @@
 printf "\n"
 printf "Wipe Database Permissions\n"
 printf "=========================\n"
-php xcli.dbx db:wipe role
-php xcli.dbx db:wipe permission
-php xcli.dbx db:wipe role_permission
+php xcli db:wipe role
+php xcli db:wipe permission
+php xcli db:wipe role_permission
 
 printf "\n"
 printf "Seed All Roles\n"
 printf "####################\n"
-php xcli.dbx db:feed db/data/role.json
+php xcli db:feed db/data/role.json
 
 printf "\n"
 printf "Seed All Permissions\n"
 printf "####################\n"
-php xcli.dbx db:feed db/data/permission.json
+php xcli db:feed db/data/permission.json
 
 printf "\n"
 printf "Seed Administrator Permissions\n"
 printf "##############################\n"
-php xcli.dbx db:feed db/data/admin/role_permission.json
+php xcli db:feed db/data/admin/role_permission.json
