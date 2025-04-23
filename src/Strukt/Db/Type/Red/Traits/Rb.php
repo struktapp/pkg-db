@@ -3,6 +3,7 @@
 namespace Strukt\Db\Type\Red\Traits;
 
 use RedBeanPHP\R;
+use RedBeanPHP\SimpleModelInterface;
 
  /** 
  * @author Moderator <pitsolu@gmail.com>
@@ -56,7 +57,7 @@ trait Rb{
     /**
      * @param string $name
      */
-    public function __get($name):array{
+    public function __get($name):array|string|SimpleModelInterface{
 
         $prop = str($name);
         if($prop->equals("id"))
