@@ -1,8 +1,0 @@
-{
-    "files": [
-        "lib\/App\/Command\/Db\/DbMakeModels.php",
-        "lib\/App\/Command\/Db\/ModelMake.php",
-        "lib\/App\/Command\/Db\/DbMakeFromModels.php",
-        "cfg\/db.ini"
-    ]
-}
