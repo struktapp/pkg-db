@@ -138,10 +138,10 @@ if(helper_add("useDb")){
 
 		$db = trim($db);
 		reg("db.which", $db);
-		if(!in_array($db, ["pop", "rb"]))
+		if(!in_array($db, ["pop", "rb", "red"]))
 			return false;
 
-		if($db == "rb")
+		if(in_array($db, ["rb", "red"]))
 			new RedDb();
 
 		if($db == "pop")
@@ -166,7 +166,7 @@ if(helper_add("switchDb")){
 
 		if(!isset($db))
 			$db = "rb";
-		elseif(str($db)->equals("rb"))
+		elseif(str($db)->equals("rb") || str($db)->equals("red"))
 			$db = "pop";
 		elseif(str($db)->equals("pop"))
 			$db = "rb";
@@ -252,7 +252,7 @@ if(helper_add("pdo")){
 		if($db->equals("pop"))
 			$pdo = db()->getConnection();
 
-		if($db->equals("rb"))
+		if($db->equals("rb") || $db->equals("red"))
 			$pdo = db()->getDatabaseAdapter()->getDatabase()->getPdo();
 
 		// $pdo->setAttribute(PDO::ATTR_PERSISTENT, true);
@@ -625,9 +625,9 @@ if(helper_add("select")){
 					 * @param string $name
 					 * @param array $args
 					 * 
-					 * @return \Strukt\Contract\SqlInterface
+					 * @return \Strukt\Contract\SqlInterface|bool
 					 */
-					public function __call(string $name, array $args):SqlInterface{
+					public function __call(string $name, array $args):SqlInterface|bool{
 
 						return $this->self->$name(...$args);
 					}
