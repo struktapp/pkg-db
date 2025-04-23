@@ -8,6 +8,7 @@ use Pop\Db\Adapter\Pdo as PopDbPdo;
 use Pop\Db\Record as PopDbRecord;
 use Pop\Db\Adapter\AbstractAdapter as PopDbAbstractAdapter;
 use RedBeanPHP\OODBBean as Bean;
+use RedBeanPHP\SimpleModelInterface;
 use RedBeanPHP\R;
 use Faker\Generator;
 use Strukt\Type\Str;
@@ -21,7 +22,7 @@ if(helper_add("sync")){
 	* 
 	* @param array|\RedBeanPHP\OODBBean $bean
 	*/
-	function sync(array|Bean $bean):array|Bean{
+	function sync(array|Bean $bean):array|Bean|SimpleModelInterface{
 
 		if(is_array($bean))
 			return arr($bean)->each(fn($k, $v)=>sync($v))->yield();
