@@ -6,7 +6,6 @@ bootstrap.php
 cfg/
 /index.php
 lib/
-xcli
 app/
 ./db/
 payroll.sqlite
