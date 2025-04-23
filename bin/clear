@@ -2,3 +2,5 @@
 
 rm -rf cfg .tpl .cache lib
 rm bootstrap.php index.php .env php_errors.log xcli composer.lock
+rm -rf db
+rm *.sqlite

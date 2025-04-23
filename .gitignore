@@ -14,3 +14,9 @@ php_errors.log
 /xcli.dbx
 /xhttp.dbx
 sql/
+.bak/
+/bin/*
+!/bin/clear
+/db
+/xhttp
+/xcli

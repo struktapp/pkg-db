@@ -1,4 +1,3 @@
-#!/usr/bin/php
 <?php
 
 use Strukt\Http\Request;
@@ -11,7 +10,7 @@ require "bootstrap.php";
 env("json_validation_err", true);
 env("res_send_headers", false);
 config("app.type","App:Cli");
-useDb(str(config("package.auth.default"))->replace("-db","")->yield());
+useDb("pop");
 
 XSession::withOptions(array(
 
