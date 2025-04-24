@@ -43,9 +43,11 @@ if(helper_add("rb")){
 	 * @param string $model_name
 	 * @param int $id
 	 * 
-	 * @return \RedBeanPHP\R
+	 * @return \RedBeanPHP\R |
+	 * 		   \RedBeanPHP\OODBBean |
+	 *         \RedBeanPHP\SimpleModelInterface | array
 	 */
-	function rb(string $model_name = null, int $id = null):R{
+	function rb(string $model_name = null, int $id = null):R|Bean|SimpleModelInterface|array{
 
 		if(!is_null($model_name) && is_null($id)) 
 			return R::getRedBean()->dispense(str($model_name)->toLower()->yield())->box();
