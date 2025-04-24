@@ -22,6 +22,9 @@ if(helper_add("sync")){
 	* Sync bean and model
 	* 
 	* @param array|\RedBeanPHP\OODBBean $bean
+	* 
+	* @return \RedBeanPHP\SimpleModelInterface|
+	*         \RedBeanPHP\OODBBean|array
 	*/
 	function sync(array|Bean $bean):array|Bean|SimpleModelInterface{
 
@@ -43,9 +46,9 @@ if(helper_add("rb")){
 	 * @param string $model_name
 	 * @param int $id
 	 * 
-	 * @return \RedBeanPHP\R |
-	 * 		   \RedBeanPHP\OODBBean |
-	 *         \RedBeanPHP\SimpleModelInterface | array
+	 * @return \RedBeanPHP\R|
+	 *         \RedBeanPHP\OODBBean|
+	 *         \RedBeanPHP\SimpleModelInterface|array
 	 */
 	function rb(string $model_name = null, int $id = null):R|Bean|SimpleModelInterface|array{
 
@@ -85,6 +88,8 @@ if(helper_add("schema")){
 if(helper_add("makeModel")){
 
 	/**
+	 * Make model for PopDb only
+	 * 
 	 * @param string $model
 	 * 
 	 * @return \Pop\Db\Record
@@ -106,7 +111,8 @@ if(helper_add("popdb")){
 	 * @param string $model_name
 	 * @param int $id
 	 * 
-	 * @return \Pop\Db\Record|\Pop\Db\Adapter\AbstractAdapter
+	 * @return \Pop\Db\Record|
+	 *         \Pop\Db\Adapter\AbstractAdapter
 	 */
 	function popdb(string $model_name = null, int $id = null):PopDbRecord|PopDbAbstractAdapter{
 
@@ -186,9 +192,13 @@ if(helper_add("db")){
 	 * @param string $model_name
 	 * @param string $id
 	 * 
-	 * @return \RedBeanPHP\R|\Pop\Db\Record|\Pop\Db\Adapter\AbstractAdapter
+	 * @return \RedBeanPHP\R|
+	 * 		   \RedBeanPHP\SimpleModelInterface|
+	 *         \Pop\Db\Record|
+	 *         \Pop\Db\Adapter\AbstractAdapter
 	 */
-	function db(string $model_name = null, int $id = null):R|PopDbRecord|PopDbAbstractAdapter{
+	function db(string $model_name = null, int $id = null):R|SimpleModelInterface|
+															PopDbRecord|PopDbAbstractAdapter{
 
 		if(!is_null($model_name) && is_null($id))
 			if(str($model_name)->endsWith("*"))
