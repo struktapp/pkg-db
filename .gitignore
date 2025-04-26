@@ -5,8 +5,8 @@ vendor/
 bootstrap.php
 cfg/
 /index.php
-lib/
-app/
+/lib/
+/app/
 ./db/
 payroll.sqlite
 php_errors.log

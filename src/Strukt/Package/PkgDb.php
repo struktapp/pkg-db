@@ -27,6 +27,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 				"cfg/db.ini",
 				"index.php",
 				"app/src/App/User.sgf",
+				"app/src/App/AuthModule/Controller/User.sgf",
 				"db/data/permission.json",
 				"db/data/user.json",
 				"db/data/role.json",
