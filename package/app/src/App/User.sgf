@@ -20,6 +20,7 @@ class User extends \Strukt\Db\Type\Red\Contract\Entity{
 
 	/**
      * @Type(datetime)
+     * @Default(now)
      */
     public $created_at;
 }

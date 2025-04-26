@@ -24,14 +24,10 @@ class DbSeedFile extends \Strukt\Console\Command{
 	*/
 	public function execute(Input $in, Output $out){
 
-		if(negate(class_exists(\Strukt\Hash\Bcrypt::class)))
-			raise("package[strukt/key] is required by bcry!");
-
 		$path = $in->get("path");
 
-		// dd($path);
 		$seeder = new Seeder($path);
-		$seeder->useHashFn(fn($password)=>bcry($password)->encode());
+		$seeder->useHashFn(hashfn());
 		$seeder->up();
 
 		$out->add("Database successfully seeded!");

@@ -30,6 +30,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 				"db/data/permission.json",
 				"db/data/user.json",
 				"db/data/role.json",
+				"db/data/users/user.json",
 				"db/data/admin/user.json",
 				"db/data/admin/role_permission.json",
 				"lib/App/Command/Db/DbMakeFromModels.php",
@@ -63,8 +64,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 		$settings = array(
 			"App:Cli"=>array(
 				"providers"=>array(
-					\App\Provider\Facet::class,
-					\App\Provider\Faker::class
+					\App\Provider\Facet::class
 				),
 				"middlewares"=>array(),
 				"commands"=>array(

@@ -6,7 +6,7 @@ use Strukt\Console\Input;
 use Strukt\Console\Output;
 
 /**
-* db:sql    Run SQL
+* db:sql    Run SQL (sql)
 *
 * Usage:
 *

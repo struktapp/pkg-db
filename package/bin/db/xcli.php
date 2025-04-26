@@ -23,6 +23,7 @@ alias("routes", "route:ls");
 alias("packages", "package:ls");
 alias("system", "sys:ls");
 alias("run", "app:exec");
+alias("cache", "cache:reset");
 alias("sql", "db:sql");
 alias("seed", "db:seeds");
 $argv = arr($_SERVER["argv"])->each(function($_, $name){

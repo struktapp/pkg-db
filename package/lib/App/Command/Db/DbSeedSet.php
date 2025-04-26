@@ -7,7 +7,7 @@ use Strukt\Console\Output;
 use Strukt\Db\Type\Pop\Seeder;
 
 /**
-* db:seeds   Seed database tables with JSON set (folder)
+* db:seeds   Seed database tables with JSON fileset - folder (seed)
 *
 * Usage:
 *
@@ -25,9 +25,6 @@ class DbSeedSet extends \Strukt\Console\Command{
 	*/
 	public function execute(Input $in, Output $out){
 
-		if(negate(class_exists(\Strukt\Hash\Bcrypt::class)))
-			raise("package[strukt/key] is required by bcry!");
-
 		$direction = $in->get("direction");
 		if(empty($direction))
 			$direction = "up";
@@ -40,7 +37,7 @@ class DbSeedSet extends \Strukt\Console\Command{
 		$path = \Strukt\Fs::ds($path->concat(sprintf("%s/", $filter))->yield());
 
 		$seeder = new Seeder($path, $filter);
-		$seeder->useHashFn(fn($password)=>bcry($password)->encode());
+		$seeder->useHashFn(hashfn());
 		$seeder->$direction();
 
 		$out->add("Database successfully seeded!");
