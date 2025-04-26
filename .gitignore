@@ -19,3 +19,4 @@ sql/
 /db
 /xhttp
 /xcli
+db.sqlite

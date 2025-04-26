@@ -877,6 +877,21 @@ if(helper_add("modify")){
 	}
 }
 
+if(helper_add("commit")){
+
+	function commit(string $model_name, array $data, int $id = null){
+
+		if(is_null($id))
+			$model = core(ucfirst(str($model_name)->toCamel()->yield()));
+
+		if(notnull($id))
+			$model = db(str($model_name)->toSnake()->yield(), $id);
+
+		arr($data)->each(fn($key, $val)=>$model->$key = $val);
+		$model->save();
+	}
+}
+
 if(helper_add("resultset")){
 
 	/**

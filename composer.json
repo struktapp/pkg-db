@@ -13,11 +13,15 @@
     "require": {
         "popphp/pop-db": "^6.6",
         "gabordemooij/redbean": "dev-master",
-        "monolog/monolog":"*",
-        "fakerphp/faker":"*"
+        "monolog/monolog":"*"
     },
     "require-dev":{
-        "strukt/framework": "v1.1.8-alpha"
+        "strukt/framework": "v1.1.8-alpha",
+        "sebastian/diff": "^7.0@dev"
+    },
+    "suggest":{
+
+        "fakerphp/faker":"*"
     },
     "autoload": {
         

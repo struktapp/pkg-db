@@ -39,8 +39,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 				"lib/App/Command/Db/DbSeedSet.php",
 				"lib/App/Command/Db/DbSql.php",
 				"lib/App/Command/Db/DbMakeModels.php",
-				"lib/App/Provider/Facet.php",
-				"lib/App/Provider/Faker.php"
+				"lib/App/Provider/Facet.php"
 			)
 		);
 	}
