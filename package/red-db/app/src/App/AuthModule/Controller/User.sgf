@@ -1,0 +1,35 @@
+<?php
+namespace {{app}}\AuthModule\Controller;
+
+use Strukt\Framework\Contract\Controller as AbstractController;
+
+class User extends AbstractController{
+
+	public function find(int $id){
+
+		return db("user", $id);
+	}
+
+	public function getAll(){
+
+		return sync(db()->findAll("user"));
+	}
+
+	public function findByUsername(string $username){
+
+		$user = db()->findOne("user", "username = ?", [$username]);
+		if(is_null($user))
+			return null;
+
+	   	return sync($user);
+	}
+
+	public function doAuth(string $username, string $password){
+
+		$user = $this->findByUsername($username);
+		if(is_null($user))
+			return false;
+
+		return $user->username == $username && $user->password == hashfn()($password);
+	}
+}

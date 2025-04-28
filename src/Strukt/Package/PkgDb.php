@@ -13,35 +13,48 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 
 	public function __construct(){
 
+		$app_name = config("app.name");
+		$db = config("package.db.default");
+
+		if(is_null($db))
+			raise("package[db] requires spec config[package.db.default]!");
+
+		$files = [
+
+			"bin/seed",
+			"bin/seed-acl",
+			"bin/sqlite",
+			"bin/db/xhttp.php",
+			"bin/db/xcli.php",
+			"xhttp",
+			"xcli",
+			"cfg/db.ini",
+			"index.php",
+			sprintf("%s/app/src/App/User.sgf", $db),
+			sprintf("%s/app/src/App/AuthModule/Controller/User.sgf", $db),
+			"db/data/permission.json",
+			"db/data/user.json",
+			"db/data/role.json",
+			"db/data/users/user.json",
+			"db/data/admin/user.json",
+			"db/data/admin/role_permission.json",
+			"lib/App/Command/Db/DbMakeFromModels.php",
+			"lib/App/Command/Db/DbWipe.php",
+			"lib/App/Command/Db/ModelMake.php",
+			"lib/App/Command/Db/DbSeedFile.php",
+			"lib/App/Command/Db/DbSeedSet.php",
+			"lib/App/Command/Db/DbSql.php",
+			"lib/App/Command/Db/DbMakeModels.php",
+			"lib/App/Provider/Facet.php"
+		];
+
 		$this->manifest = array(
+
 			"cmd_name"=>"Db",
 			"package"=>"pkg-db",
-			"files"=>array(
-				"bin/seed",
-				"bin/seed-acl",
-				"bin/sqlite",
-				"bin/db/xhttp.php",
-				"bin/db/xcli.php",
-				"xhttp",
-				"xcli",
-				"cfg/db.ini",
-				"index.php",
-				"app/src/App/User.sgf",
-				"app/src/App/AuthModule/Controller/User.sgf",
-				"db/data/permission.json",
-				"db/data/user.json",
-				"db/data/role.json",
-				"db/data/users/user.json",
-				"db/data/admin/user.json",
-				"db/data/admin/role_permission.json",
-				"lib/App/Command/Db/DbMakeFromModels.php",
-				"lib/App/Command/Db/DbWipe.php",
-				"lib/App/Command/Db/ModelMake.php",
-				"lib/App/Command/Db/DbSeedFile.php",
-				"lib/App/Command/Db/DbSeedSet.php",
-				"lib/App/Command/Db/DbSql.php",
-				"lib/App/Command/Db/DbMakeModels.php",
-				"lib/App/Provider/Facet.php"
+			"files"=>$files,
+			"modules"=>array(
+				"AuthModule"
 			)
 		);
 	}
@@ -118,7 +131,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 	 */
 	public function getModules():array|null{
 
-		return null;
+		return $this->manifest["modules"];
 	}
 
 	/**

@@ -19,7 +19,7 @@ helper("pkg-db");
 if(helper_add("sync")){
 
 	/**
-	* Sync bean and model
+	* Sync bean and model for RedDb only
 	* 
 	* @param array|\RedBeanPHP\OODBBean $bean
 	* 
@@ -43,14 +43,14 @@ if(helper_add("sync")){
 
 if(helper_add("rb")){
 	/**
-	 * @param string $model_name
-	 * @param int $id
+	 * @param ?string $model_name
+	 * @param ?int $id
 	 * 
 	 * @return \RedBeanPHP\R|
 	 *         \RedBeanPHP\OODBBean|
 	 *         \RedBeanPHP\SimpleModelInterface|array
 	 */
-	function rb(string $model_name = null, int $id = null):R|Bean|SimpleModelInterface|array{
+	function rb(?string $model_name = null, ?int $id = null):R|Bean|SimpleModelInterface|array{
 
 		if(!is_null($model_name) && is_null($id)) 
 			return R::getRedBean()->dispense(str($model_name)->toLower()->yield())->box();
@@ -114,7 +114,7 @@ if(helper_add("popdb")){
 	 * @return \Pop\Db\Record|
 	 *         \Pop\Db\Adapter\AbstractAdapter
 	 */
-	function popdb(string $model_name = null, int $id = null):PopDbRecord|PopDbAbstractAdapter{
+	function popdb(?string $model_name = null, ?int $id = null):PopDbRecord|PopDbAbstractAdapter{
 
 		if(!is_null($model_name)){
 
@@ -138,6 +138,10 @@ if(helper_add("popdb")){
 if(helper_add("useDb")){
 
 	/**
+	 * useDb("red")
+	 * useDb("rb")
+	 * useDb("pop")
+	 * 
 	 * @param string $db
 	 * 
 	 * @return bool
@@ -162,6 +166,8 @@ if(helper_add("useDb")){
 if(helper_add("switchDb")){
 
 	/**
+	 * Change db between pop-db|red-db
+	 * 
 	 * @return string|null
 	 */
 	function switchDb():string|null{
@@ -189,6 +195,8 @@ if(helper_add("switchDb")){
 if(helper_add("db")){
 
 	/**
+	 * db("user", 1)
+	 * 
 	 * @param string $model_name
 	 * @param string $id
 	 * 
@@ -197,7 +205,7 @@ if(helper_add("db")){
 	 *         \Pop\Db\Record|
 	 *         \Pop\Db\Adapter\AbstractAdapter
 	 */
-	function db(string $model_name = null, int $id = null):R|SimpleModelInterface|
+	function db(?string $model_name = null, ?int $id = null):R|SimpleModelInterface|
 															PopDbRecord|PopDbAbstractAdapter{
 
 		if(!is_null($model_name) && is_null($id))
@@ -238,13 +246,15 @@ if(helper_add("db")){
 if(helper_add("sm")){
 
 	/**
+	 * usage: sm($table_name)
+	 * 
 	 * PopDb Schema Manager
 	 * 
 	 * @param string $table
 	 * 
 	 * @return Strukt\Db\Type\Pop\SchemaManager
 	 */
-	function sm(string $table = null):SchemaManager{
+	function sm(?string $table = null):SchemaManager{
 
 		return new SchemaManager($table);
 	}
@@ -255,6 +265,23 @@ if(helper_add("pdo")){
 	counter(0, ".strukt-trx");
 
 	/**
+	 * $pdo = pdo()
+	 * 
+	 * // Transaction
+	 * $pdo->begin()
+	 * $pdo->commit()
+	 * $pdo->rollback()
+	 * $pdo->transact(callable $callback):array|null
+	 * 
+	 * // Querying
+	 * $pdo->execPreQuery(string $sql, array $params):array
+	 * $pdo->execQuery(string $sql, ?array $params):array|null
+	 * $pdo->execPrep(string $sql, ?array $params):array|null
+	 * $pdo->qMarks(array $params):string // create question marks string for list of params
+	 * 
+	 * // Pdo
+	 * $pdo->getDb():\Pdo
+	 * 
 	 * @return object
 	 */
 	function pdo():object{
@@ -410,10 +437,12 @@ if(helper_add("pdo")){
 if(helper_add("seed")){
 
 	/**
+	 * seed(string $table, array $data)
+	 * 
 	 * @param string $table
 	 * @param array $data
 	 * 
-	 * @return array
+	 * @return \Pop\Db\Adapter\AbstractAdapter
 	 */
 	function seed(string $table, array $data = []):PopDbAbstractAdapter{
 
@@ -428,11 +457,11 @@ if(helper_add("seed")){
 if(helper_add("fake")){
 
 	/**
-	 * @param string $var
+	 * @param ?string $var
 	 * 
 	 * @return \Faker\Generator
 	 */
-	function fake(string $var = null):FakerGenerator{
+	function fake(?string $var = null):FakerGenerator{
 
 		$fake = event("provider.fake")->exec();
 
@@ -446,6 +475,21 @@ if(helper_add("fake")){
 if(helper_add("select")){
 
 	/**
+	 * SQL
+	 *	└── select(string $fields)
+	 *	    ├── addSelect(string $fields)
+	 *	    ├── from(string $tables)
+	 *	    │	 └── leftjoin(string $join)
+	 *	    ├── groupBy(string $columns)
+	 *	    ├── limit(int $limit)
+	 *	    ├── orderBy(string $columns, string $order = "DESC")
+	 *	    ├── page(int $page, int $perPage=10)
+	 *	    ├── union(string $sql)
+	 *	    ├── unionAll(string $sql)
+	 *	    └── where(string $condition)
+	 *	        ├── andWhere(string $condition)
+	 *	        └── orWhere(string $condition)
+	 * 
 	 * @param string $fields
 	 */
 	function select(string $fields):SqlInterface{
@@ -556,12 +600,14 @@ if(helper_add("select")){
 					}
 
 					/**
+					 * Call parent SQL class
+					 * 
 					 * @param string $name
 					 * @param array $args
 					 * 
 					 * @return \Strukt\Contract\SqlInterface
 					 */
-					public function __call(string $name, array $args):SqlInterface{
+					public function __call(string $name, array $args):SqlInterface|bool{
 
 						if(arr([
 							"orWhere", 
@@ -634,6 +680,8 @@ if(helper_add("select")){
 					}
 
 					/**
+					 * Call parent SQL class
+					 * 
 					 * @param string $name
 					 * @param array $args
 					 * 
@@ -741,6 +789,16 @@ if(helper_add("select")){
 if(helper_add("modify")){
 
 	/**
+	 * SQL
+	 *	└──modify(string $table)
+	 *		 ├── addSet(string $modify)
+	 *		 ├── set(string $modify)
+	 *		 │	  ├── andWhere(string $condition)
+	 *		 │	  ├── orWhere(string $condition)
+	 *		 │	  ├── where(string $condition)
+	 *		 │	  └── yield():string
+	 *		 └── yield():string
+	 * 
 	 * @param string $table
 	 */
 	function modify(string $table):SqlInterface{
@@ -839,7 +897,7 @@ if(helper_add("modify")){
 					 * 
 					 * @return \Strukt\Contract\SqlInterface
 					 */
-					public function __call(string $name, array $args):SqlInterface{
+					public function __call(string $name, array $args):SqlInterface|bool{
 
 						return $this->parent->$name(...$args);
 					}
@@ -879,7 +937,14 @@ if(helper_add("modify")){
 
 if(helper_add("commit")){
 
-	function commit(string $model_name, array $data, int $id = null){
+	/**
+	 * @param string $model_name
+	 * @param array $data
+	 * @param ?int id
+	 * 
+	 * @return mixed
+	 */
+	function commit(string $model_name, array $data, ?int $id = null):mixed{
 
 		if(is_null($id))
 			$model = core(ucfirst(str($model_name)->toCamel()->yield()));
@@ -888,13 +953,24 @@ if(helper_add("commit")){
 			$model = db(str($model_name)->toSnake()->yield(), $id);
 
 		arr($data)->each(fn($key, $val)=>$model->$key = $val);
-		$model->save();
+		
+		return $model->save();
 	}
 }
 
 if(helper_add("resultset")){
 
+	format("humanize", function($date){
+
+		return @when($date)->when();
+	});
+
 	/**
+	 * // normalize example string "created_at:date" or "created_at:humanize"
+	 * resultset(mixed $sql, array $filter)->normalize(string $field)->yield()
+	 * resultset(mixed $sql, array $filter)->yield()
+	 * resultset(mixed $sql)->yield()
+	 * 
 	 * @param mixed $sql
 	 * @param array $filter
 	 */
@@ -928,12 +1004,9 @@ if(helper_add("resultset")){
 			public function normalize(string $field):static{
 
 				list($field, $type) = str($field)->split(":");
-
-				$type = str($type);
 				$rs = arr($this->rs)->each(function($k, $row)use($field, $type){
 
-					if($type->equals("date"))
-						$row[$field] = @when($row[$field])->when();
+					$row[$field] = cmd(sprintf("format.%s", $type), [$row[$field]]);
 
 					return $row;
 				});

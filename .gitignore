@@ -3,7 +3,7 @@ vendor/
 .tpl/
 .cache/
 bootstrap.php
-cfg/
+/cfg/
 /index.php
 /lib/
 /app/
