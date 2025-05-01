@@ -1,18 +1,19 @@
 <?php
 
-use Strukt\Db\Type\Pop\SchemaManager;
-use Strukt\Db\Type\Pop\Connection as PopDb;
+use Strukt\Type\Str;
+use Strukt\Contract\SqlInterface;
 use Strukt\Db\Type\Red\Connection as RedDb;
+use Strukt\Db\Type\Pop\Connection as PopDb;
+use Strukt\Db\Type\Pop\SchemaManager;
+use Pop\Db\Record as PopDbRecord;
 use Pop\Db\Sql\Schema as PopDbSchema;
 use Pop\Db\Adapter\Pdo as PopDbPdo;
-use Pop\Db\Record as PopDbRecord;
 use Pop\Db\Adapter\AbstractAdapter as PopDbAbstractAdapter;
 use RedBeanPHP\OODBBean as Bean;
 use RedBeanPHP\SimpleModelInterface;
 use RedBeanPHP\R;
 use Faker\Generator;
-use Strukt\Type\Str;
-use Strukt\Contract\SqlInterface;
+
 
 helper("pkg-db");
 
@@ -20,6 +21,9 @@ if(helper_add("sync")){
 
 	/**
 	* Sync bean and model for RedDb only
+	* 
+	*  sync($rs) // recordset
+	*  sync($row)
 	* 
 	* @param array|\RedBeanPHP\OODBBean $bean
 	* 
@@ -195,7 +199,8 @@ if(helper_add("switchDb")){
 if(helper_add("db")){
 
 	/**
-	 * db("user", 1)
+	 * $user = db("user"); // empty model
+	 * $user = db("user", 1) // find user by id:1
 	 * 
 	 * @param string $model_name
 	 * @param string $id
@@ -491,10 +496,12 @@ if(helper_add("select")){
 	 *	        └── orWhere(string $condition)
 	 * 
 	 * @param string $fields
+	 * 
+	 * @return Strukt\Contract\SqlInterface|string
 	 */
-	function select(string $fields):SqlInterface{
+	function select(string $fields):SqlInterface|string{
 
-		$ops=fn(string $fields)=>arr(str($fields)->split(","))->each(function($k, $field){
+		$ops = fn(string $fields)=>arr(str($fields)->split(","))->each(function($k, $field){
 				
 			$field = str(trim($field));
 			if($field->startsWith("date(")){
@@ -535,6 +542,9 @@ if(helper_add("select")){
 		 */
 		return new class($sql, $ops) implements SqlInterface{
 
+			use Strukt\Traits\Query\Set;
+			use Strukt\Traits\Query\Aggregate;
+
 			private $sql;
 			private $ops;
 			public $prep;
@@ -568,10 +578,7 @@ if(helper_add("select")){
 			 */
 			public function from(string $tables):SqlInterface{
 
-				// $self = $this;
 				$this->sql = $this->sql->concat(str(" FROM ")->concat($tables));
-
-				// return new class($self, $this->sql){
 				return new class($this, $this->sql) implements SqlInterface{
 
 					private $sql;
@@ -632,16 +639,20 @@ if(helper_add("select")){
 			 */
 			public function where(string $condition):SqlInterface{
 
-				// $self = $this;
 				$this->sql = $this->sql->concat(" WHERE ")->concat($condition);
 				if(str($condition)->contains("?"))
 					$this->prep = true;
 
-				// return new class($self, $this->sql){
 				return new class($this, $this->sql) implements SqlInterface{
+
+					use Strukt\Traits\Query\Predicate, Strukt\Traits\Query\Aggregate {
+		        		Strukt\Traits\Query\Aggregate::isPrep insteadof Strukt\Traits\Query\Predicate;
+		        		Strukt\Traits\Query\Aggregate::yield insteadof Strukt\Traits\Query\Predicate;
+		    		}
 
 					private $self;
 					private $sql;
+					public $prep;
 
 					/**
 					 * @param object $self
@@ -649,34 +660,9 @@ if(helper_add("select")){
 					 */
 					public function __construct(object $self, Str &$sql){
 
+						$this->prep = false;
 						$this->sql = &$sql;
 						$this->self = $self;
-					}
-
-					/**
-					 * @param string $condition
-					 * 
-					 * @return static
-					 */
-					public function andWhere(string $condition):static{
-
-						$this->sql = $this->sql->concat(" AND ")->concat($condition);
-						if(str($condition)->contains("?"))
-							$this->self->prep = true;
-
-						return $this;
-					}
-
-					/**
-					 * @param string $condition
-					 */
-					public function orWhere(string $condition):static{
-
-						$this->sql = $this->sql->concat(" OR ")->concat($condition);
-						if(str($condition)->contains("?"))
-							$this->self->prep = true;
-
-						return $this;
 					}
 
 					/**
@@ -697,85 +683,6 @@ if(helper_add("select")){
 						return $this->sql->yield();
 					}
 				};
-			}
-
-			public function limit(int $limit):static{
-
-				$this->sql = $this->sql->concat(sprintf(" LIMIT %d", $limit));
-
-				return $this;
-			}
-
-			/**
-			 * @param int $page
-			 * @param int $perPage
-			 * 
-			 * @return static
-			 */
-			public function page(int $page, int $perPage=10):static{
-
-				$offset = ($page - 1) * $perPage;
-
-				$this->sql = $this->sql->concat(sprintf(" LIMIT %d, %d", $offset, $perPage));
-
-				return $this;
-			}
-
-			/**
-			 * @param string $columns
-			 * 
-			 * @return static
-			 */
-			public function groupBy(string $columns):static{
-
-				$this->sql = $this->sql->concat(sprintf(" GROUP BY %s", $columns));
-
-				return $this;
-			}
-
-			/**
-			 * @param string $columns
-			 * @param string $order
-			 * 
-			 * @return static
-			 */
-			public function orderBy(string $columns, string $order = "DESC"):static{
-
-				$this->sql = $this->sql->concat(sprintf(" ORDER BY %s %s", $columns, $order));
-
-				return $this;
-			}
-
-			/**
-			 * @param string $sql
-			 * 
-			 * @return static
-			 */
-			public function union(string $sql):static{
-
-				$this->sql = $this->sql->concat(" UNION ")->concat($sql);
-
-				return $this;
-			}
-
-			/**
-			 * @param string $sql
-			 * 
-			 * @return static
-			 */
-			public function unionAll(string $sql):static{
-
-				$this->sql = $this->sql->concat(" UNION ALL ")->concat($sql);
-
-				return $this;
-			}
-
-			/**
-			 * @return bool
-			 */
-			public function isPrep():bool{
-
-				return $this->prep;
 			}
 
 			public function __toString(){
@@ -800,12 +707,15 @@ if(helper_add("modify")){
 	 *		 └── yield():string
 	 * 
 	 * @param string $table
+	 * 
+	 * @return Strukt\Contract\SqlInterface|string
 	 */
-	function modify(string $table):SqlInterface{
+	function modify(string $table):SqlInterface|string{
 
 		return new class($table) implements SqlInterface{
 
 			private $sql;
+			public $prep;
 
 			/**
 			 * @param string $table
@@ -813,6 +723,7 @@ if(helper_add("modify")){
 			public function __construct(string $table){
 
 				$this->sql = str("UPDATE ")->concat($table);
+				$this->prep = false;
 			}
 
 			/**
@@ -828,67 +739,20 @@ if(helper_add("modify")){
 
 				return new class($this, $this->sql) implements SqlInterface{
 
+					use Strukt\Traits\Query\Predicate;
+
 					private $sql;
-					private $parent;
+					private $self;
+					private $prep;
 
 					/**
 					 * @param object $self
 					 * @param string $sql
 					 */
-					public function __construct(object $parent, Str $sql){
+					public function __construct(object $self, Str $sql){
 
-						$this->parent = $parent;
+						$this->self = $self;
 						$this->sql = $sql;
-					}
-
-					/**
-					 * @param string $condition
-					 * 
-					 * @return static 
-					 */
-					public function where(string $condition):static{
-
-						$where = " WHERE ";
-						if($this->sql->contains("WHERE"))
-							$where = " AND ";
-
-						$this->sql = $this->sql->concat($where)->concat($condition);
-
-						return $this;
-					}
-
-					/**
-					 * @param string $condition
-					 * 
-					 * @return static
-					 */
-					public function andWhere(string $condition):static{
-
-						return $this->where($condition);
-					}
-
-					/**
-					 * @param string $condition
-					 * 
-					 * @return static
-					 */
-					public function orWhere(string $condition):static{
-
-						$where = " WHERE ";
-						if($this->sql->contains("WHERE"))
-							$where = " OR ";
-
-						$this->sql = $this->sql->concat($where)->concat($condition);
-
-						return $this;
-					}
-
-					/**
-					 * @return string
-					 */
-					public function yield():string{
-
-						return $this->sql->yield();
 					}
 
 					/**
@@ -899,7 +763,7 @@ if(helper_add("modify")){
 					 */
 					public function __call(string $name, array $args):SqlInterface|bool{
 
-						return $this->parent->$name(...$args);
+						return $this->self->$name(...$args);
 					}
 
 					public function __toString(){
@@ -935,35 +799,100 @@ if(helper_add("modify")){
 	}
 }
 
+
+if(helper_add("sql")){
+
+	/**
+	 * Use SQL aggregation functions
+	 * 
+	 * @param $sql
+	 * 
+	 * @return Strukt\Contract\SqlInterface|string
+	 */
+	function sql(string $sql = ""):SqlInterface|string{
+
+		return new class($sql) implements SqlInterface{
+
+			use Strukt\Traits\Query\Aggregate;
+
+			private $sql;
+			public $prep;
+
+			public function __construct(string $sql){
+
+				$this->prep = false;
+				$this->sql = str($sql);
+			}
+
+			public function __toString(){
+
+				return trim($this->sql->yield());
+			}
+		};
+	}
+}
+
 if(helper_add("commit")){
 
 	/**
+	 * $user_id = commit("user", ["usename"=>"pitsolu","password"=>hashfn()("p@55w0rd")]);// add
+	 * $success = commit("user", ["password"=>hashfn()("*p@55w0rd$")], $user_id); // update
+	 * 
 	 * @param string $model_name
 	 * @param array $data
 	 * @param ?int id
 	 * 
-	 * @return mixed
+	 * @return \RedBeanPHP\SimpleModelInterface|
+	 * 			\Pop\Db\Record|bool|null
 	 */
-	function commit(string $model_name, array $data, ?int $id = null):mixed{
+	function commit(string $model_name, array $data, ?int $id = null):PopDbRecord|
+																		SimpleModelInterface|
+																		bool|null{
 
-		if(is_null($id))
-			$model = core(ucfirst(str($model_name)->toCamel()->yield()));
+		$mode = str(is_null($id)?"new":"update");
 
-		if(notnull($id))
-			$model = db(str($model_name)->toSnake()->yield(), $id);
+		try{
 
-		arr($data)->each(fn($key, $val)=>$model->$key = $val);
-		
-		return $model->save();
+			$snake = str($model_name)->toSnake()->yield();
+
+			$db = str(reg("db.which"));
+			if($mode->equals("new")){
+
+				$camel = ucfirst(str($model_name)->toCamel()->yield());
+				if($db->equals("pop"))
+					$model = core($camel, $data);
+
+				if(negate($db->equals("pop")))
+					$model = core($camel);
+			}
+
+			if($mode->equals("update"))
+				$model = db($snake, $id);
+
+			if(negate($mode->equals("new") && $db->equals("pop")))
+				arr($data)->each(fn($key, $val)=>$model->$key = $val);
+			
+			$model->save();
+			if($mode->equals("new"))
+				return $model->id;
+
+			if($mode->equals("update"))
+				return true;
+		}
+		catch(\Exception $e){
+
+			cmd("service.logger")->error($e);
+
+			if($mode->equals("new"))
+				return null;
+
+			if($mode->equals("update"))
+				return false;
+		}
 	}
 }
 
 if(helper_add("resultset")){
-
-	format("humanize", function($date){
-
-		return @when($date)->when();
-	});
 
 	/**
 	 * // normalize example string "created_at:date" or "created_at:humanize"
@@ -1030,6 +959,9 @@ if(helper_add("resultset")){
 if(helper_add("filter")){
 
 	/**
+	 * $filter = filter(["name", "descr"], "abc"); // ['%name%'=>'abc', '%descr%'=>'abc']
+	 * $filter = filter(["name"], "abc", false); // ['name'=>'%abc%']
+	 * 
 	 * @param array $fields
 	 * @param string $filter
 	 * @param bool $like
@@ -1056,19 +988,19 @@ if(helper_add("filter")){
 if(helper_add("last")){
 
 	/**
+	 * last("user") // find last single user
+	 * last("user", 2) // find last 2 users
+	 * last("user", 1, 10)
+	 * 
 	 * @param string $bl
 	 * @param int $count
 	 * @param int $start_at
 	 * 
 	 * @return array|\RedBeanPHP\OODBBean
 	 */
-	function last(string $tbl, int $count = 10, int $start_at = 1):array|Bean{
+	function last(string $tbl, int $count = 1, int $start_at = 1):array|Bean{
 
-		$page = page($start_at, $count);
-
-		extract($page);
-
-		$rs = db()->find($tbl, sprintf("order by id desc limit %d, %d", $offset, $limit));
+		$rs = db()->find($tbl, sql()->orderBy("id", order:"DESC")->page($count, $start_at));
 
 		return sync($rs);
 	}

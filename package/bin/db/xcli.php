@@ -29,6 +29,12 @@ alias("seed", "db:seeds");
 $argv = arr($_SERVER["argv"])->each(function($_, $name){
 
 	$alias = alias($name);
+	if(str($alias??"")->equals("db:sql") || str($name)->equals("db:sql")){
+
+		reg("env")->remove("cli_app_name");
+		env("cli_app_name","");
+	}
+
 	if(notnull($alias))
 		return $alias;
 
