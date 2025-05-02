@@ -22,7 +22,7 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 		$files = [
 
 			"bin/seed",
-			"bin/seed-acl",
+			// "bin/seed-acl",
 			"bin/sqlite",
 			"bin/db/xhttp.php",
 			"bin/db/xcli.php",
@@ -45,7 +45,9 @@ class PkgDb implements \Strukt\Framework\Contract\Package{
 			"lib/App/Command/Db/DbSeedSet.php",
 			"lib/App/Command/Db/DbSql.php",
 			"lib/App/Command/Db/DbMakeModels.php",
-			"lib/App/Provider/Facet.php"
+			"lib/App/Provider/Facet.php",
+			"lib/App/Contract/PopDbModel.php",
+			"lib/App/Contract/RedDbModel.php"
 		];
 
 		$this->manifest = array(

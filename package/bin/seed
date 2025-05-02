@@ -1,16 +1,48 @@
 #!/bin/bash
 
-printf "\n"
-printf "Wipe Database\n"
-printf "==============\n"
+if [ $# -eq 0 ]
+then
 
-./xcli db:wipe
+	printf "\n"
+	printf "Wipe Database\n"
+	printf "==============\n"
 
-printf "\n"
-printf "Seed Database\n"
-printf "=============\n"
-./xcli db:feed db/data/permission.json
-./xcli db:feed db/data/role.json
+	./xcli db:wipe
 
-./xcli db:seeds admin
+	printf "\n"
+	printf "Seed Database\n"
+	printf "=============\n"
+	./xcli db:feed db/data/permission.json
+	./xcli db:feed db/data/role.json
 
+	./xcli db:seeds admin
+
+elif [[ $1 = "acl" ]]
+then
+
+	printf "Wipe Database Permissions\n"
+	printf "=========================\n"
+	./xcli db:wipe role
+	./xcli db:wipe permission
+	./xcli db:wipe role_permission
+
+	printf "\n"
+	printf "Seed All Roles\n"
+	printf "####################\n"
+	./xcli db:feed db/data/role.json
+
+	printf "\n"
+	printf "Seed All Permissions\n"
+	printf "####################\n"
+	./xcli db:feed db/data/permission.json
+
+	printf "\n"
+	printf "Seed Administrator Permissions\n"
+	printf "##############################\n"
+	./xcli db:feed db/data/admin/role_permission.json
+
+else
+
+	printf "Invalid command!"
+
+fi

@@ -1,7 +1,7 @@
 <?php
 namespace {{app}};
 
-class User extends \Strukt\Db\Type\Pop\Contract\Entity{
+class User extends \App\Contract\PopDbModel{
 
 	/**
      * @Type(string)
